@@ -143,8 +143,8 @@ const Authorization = ({asVolunteer, createOrg}: { asVolunteer: boolean, createO
     try {
       await fetchProfileUpdate({
         ...data as IFormResult,
-        username: email.split("@")[0],
-        role: asVolunteer ? "VOLUNTEER" : "MEMBER"
+        username: (email || auth?.user?.email || "something@happend").split("@")[0],
+        role: !auth?.user?.role ? (asVolunteer ? "VOLUNTEER" : "MEMBER"): undefined
       });
       if (asVolunteer) {
         setStep(STEPS.ORGANIZATION)
