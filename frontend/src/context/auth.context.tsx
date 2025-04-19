@@ -2,13 +2,14 @@
 import React, {createContext, ReactNode, useEffect, useState} from 'react';
 import {IUser} from "@/types/user.interface";
 import {fetchProfile} from "@/api/profile";
+import {useAsync} from "react-use";
 
 interface AuthContextType {
   user: IUser | null;
   login: (token: string) => void;
   logout: () => void;
   loading: boolean;
-  updateProfile: () => void;
+  updateProfile: () => Promise<IUser | boolean>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -22,21 +23,21 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
   const [loading, setLoading] = useState(true);
 
   // Обновить данные профиля
-  const updateProfile = () => {
+  const updateProfile = async () => {
     const token = localStorage.getItem('token');
-    if (token) {
-      fetchProfile()
-          .then((response) => {
-            console.log(response.data);
-            setUser(response.data);
-          })
-          .catch(() => {
-            // Не получилось
-            setUser(null);
-          })
-          .finally(() => setLoading(false));
-    } else {
+    if(!token) setLoading(false);
+
+    try {
+      const response = await fetchProfile();
+      console.log(response.data);
+      setUser(response.data);
       setLoading(false);
+      return response.data;
+    } catch(e){
+      console.error(e);
+      setUser(null);
+      setLoading(false);
+      return false;
     }
   }
 
@@ -53,7 +54,7 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
   };
 
   // Получаем профиль при загрузке страницы
-  useEffect(updateProfile, []);
+  useAsync(updateProfile, []);
 
   // Результат - контекст
   return (

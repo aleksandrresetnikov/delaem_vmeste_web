@@ -18,10 +18,10 @@ import {Textarea} from "@/components/ui/textarea";
 import {IFormResult} from "@/widgets/Authorization/types";
 import {fetchProfileUpdate} from "@/api/profile";
 import {useRouter} from "next/navigation";
-import {createOrganization} from "@/api/organizations";
+import {createOrganization, generateOrganizationLink} from "@/api/organizations";
 
-const Authorization = ({asVolunteer}: { asVolunteer: boolean }) => {
-  const [step, setStep] = useState<number>(STEPS.ORGANIZATION);
+const Authorization = ({asVolunteer, createOrg}: { asVolunteer: boolean, createOrg: boolean }) => {
+  const [step, setStep] = useState<number>(createOrg ? STEPS.ORGANIZATION : STEPS.EMAIL);
   const [loading, setLoading] = useState(false);
 
   const [code, setCode] = useState<number>(0);
@@ -95,7 +95,8 @@ const Authorization = ({asVolunteer}: { asVolunteer: boolean }) => {
       if (result.status === 200 && result.data) {
         setStep(STEPS.COMPLETE);
         setCode(0);
-        await auth?.login(result.data.token);
+        auth?.login(result.data.token);
+        await auth?.updateProfile();
       } else {
         setCode(0);
         toast.error("Неверный или истёкший код");
@@ -162,6 +163,12 @@ const Authorization = ({asVolunteer}: { asVolunteer: boolean }) => {
 
     try {
       await createOrganization(organizationData);
+      const result = await auth?.updateProfile();
+
+      if(typeof result === "boolean" || !result) throw Error("Failed to fetch");
+      if(!result.ownedCompany?.id) throw Error("No owner company in profile");
+
+      await generateOrganizationLink(result.ownedCompany.id);
       router.push("/messages");
     } catch (e: any) {
       console.error(e);
@@ -324,9 +331,9 @@ const Authorization = ({asVolunteer}: { asVolunteer: boolean }) => {
 
   useAsync(async () => {
     if (!auth?.loading) {
-      if (auth?.user) {
+      if (auth?.user && !createOrg) {
         // Если юзер уже залогинен
-        // setStep(STEPS.COMPLETE);
+        setStep(STEPS.COMPLETE);
       }
     }
   }, [auth?.loading, auth?.user]);

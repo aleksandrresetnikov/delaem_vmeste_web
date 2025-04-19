@@ -60,6 +60,6 @@ export const removeOrganizationMember = async (userId: string) => {
 }
 
 // Сгенерировать ссылку на организацию
-export const generateOrganizationLink = async (OrganizationId: string) => {
-  return await axios.post(`/company/link/${OrganizationId}`);
+export const generateOrganizationLink = async (orgId: number) => {
+  return await axios.post(`/company/link/${orgId}`);
 }

@@ -1,4 +1,4 @@
-import {Company} from "prisma-client-45545ba697cc4784aab4e48e93f883a0ef70eced577eefae45ed1be0665c6d35";
+import {Company} from "../../../backend/generated/prisma";
 
 export interface IUser {
   id: number;
@@ -11,7 +11,7 @@ export interface IUser {
 
   role: IUserRole;
   memberCompany: Company;
-  ownerCompany: Company;
+  ownedCompany: Company;
 }
 
 export type IUserRole = "MEMBER" | "ADMIN" | "VOLUNTEER";
