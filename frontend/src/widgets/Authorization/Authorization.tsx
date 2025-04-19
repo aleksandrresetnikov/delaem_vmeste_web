@@ -130,6 +130,7 @@ const Authorization = ({asVolunteer}: { asVolunteer: boolean }) => {
     const data: any = {};
     formData.forEach((value, key) => data[key] = value);
 
+    console.log(data);
     // Проверяем поля (делается на быструю руку, сорян, я знаю что нужно делать верификацию формы через zod и regexp)
     if (data.address === "" || data.skills === "" || data.birthDate === "" || data.fullname === "") return;
     if (asVolunteer && data.skills === "") return;
@@ -266,15 +267,16 @@ const Authorization = ({asVolunteer}: { asVolunteer: boolean }) => {
                 </>
             )}
 
-            <Button
-                size='mk'
-                variant="default"
-                onClick={handleSaveProfileClick}
-                className={s.submitButton}
-            >
-              <h4>Завершить регистрацию</h4>
-            </Button>
+
           </form>
+          <Button
+              size='mk'
+              variant="default"
+              onClick={handleSaveProfileClick}
+              className={s.submitButton}
+          >
+            Завершить регистрацию
+          </Button>
         </div>
     )
   }
