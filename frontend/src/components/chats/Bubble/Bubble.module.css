@@ -1,0 +1,43 @@
+.wrapper {
+    display: flex;
+    width: 100%;
+    max-width: 65vw;
+    height: max-content;
+    gap: 6px;
+    align-items: center;
+}
+
+.wrapper:has(.bubble.my) {
+    justify-content: end;
+    flex-direction: row-reverse;
+}
+
+.time {
+    opacity: 0.6;
+    font-size: 10pt;
+}
+
+.bubble {
+    background: var(--primary);
+    border-radius: 2px 12px 12px 12px;
+    padding: 10px 16px;
+
+    width: max-content;
+    height: max-content;
+
+    max-width: 50%;
+    text-wrap: wrap;
+}
+
+.bubble, .bubble * {
+    color: white;
+}
+
+.bubble.my {
+    border-radius: 12px 2px 12px 12px;
+    background: var(--card);
+}
+
+.bubble.my, .bubble.my * {
+    color: var(--foreground);
+}

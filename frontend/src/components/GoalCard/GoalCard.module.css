@@ -1,0 +1,53 @@
+.goalCard {
+    min-height: 100%;
+    max-height: fit-content;
+
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+
+    position: relative;
+
+    padding: 20px;
+    gap: 10px;
+    border-radius: 30px;
+
+    color: #fff;
+    background-color: var(--primary);
+    overflow: hidden;
+}
+
+.goalCard h3, .goalCard p {
+    max-width: 70%;
+    z-index: 10;
+}
+
+.imageContainer {
+    position: absolute;
+    height: 100%;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    aspect-ratio: 1/1;
+}
+
+.image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    z-index: 0;
+    opacity: .6;
+    transform: scale(1.1) translateX(10%) translateY(10%);
+}
+
+
+@media (width < 1000px) {
+    .goalCard h3 {
+        font-size: 28px;
+    }
+
+    .goalCard p {
+        font-size: 14px;
+    }
+}

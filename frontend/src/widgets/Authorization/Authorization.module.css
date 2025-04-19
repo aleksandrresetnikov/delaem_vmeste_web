@@ -1,0 +1,222 @@
+.wrapper {
+    background: var(--primary);
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.wrapper h1, .wrapper h2, .wrapper p {
+    color: white;
+}
+
+/* Главная форма */
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    padding-top: 6%;
+    height: 100%;
+    width: 100%;
+    gap: 64px;
+    text-align: center;
+}
+
+.form.grid {
+    padding: 24px;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    grid-template-rows: 1fr;
+}
+
+.form h1 {
+    font-size: 44pt;
+    font-weight: 700;
+}
+
+.form h2 {
+    font-size: 28pt;
+    font-weight: 400;
+}
+
+/* Поле для почты */
+.emailInput {
+    display: flex;
+    background: white;
+    border-radius: 9999px;
+    padding: 12px 24px;
+}
+
+.emailInput input {
+    outline: none;
+    border: none;
+    appearance: none;
+    background: transparent;
+    padding: 0;
+    color: black;
+    min-width: 300px;
+}
+
+.emailInput button {
+    border-radius: 9999px;
+}
+
+.emailInput .loader {
+    stroke: var(--primary);
+}
+
+.emailInput input::placeholder {
+    color: gray;
+}
+
+/* Заголовки */
+.form .gridTitles {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Форма завершения */
+.completionForm {
+    background: white;
+    width: 100%;
+    height: 100%;
+    max-width: 800px;
+    padding: 16px;
+    border-radius: 16px;
+}
+
+.completionForm form {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 8px;
+    overflow: auto;
+    max-height: 90vh;
+}
+
+.completionForm .submitButton {
+    width: 100%;
+}
+
+.completionForm label {
+    font-size: 15pt;
+    font-weight: 600;
+}
+
+.completionForm * {
+    color: black;
+}
+
+.completionForm input, .completionForm textarea {
+    box-shadow: none;
+    border: none;
+    outline: none;
+    appearance: none;
+
+    padding: 12px 16px !important;
+    border-radius: 10px;
+    width: 100%;
+    background: rgb(232, 232, 232);
+    font-size: 12pt;
+    height: max-content;
+}
+
+.completionForm input::placeholder {
+    color: rgb(130, 130, 130);
+}
+
+/* Кнопки категорий */
+.categories_container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.category_button {
+    padding: 6px 10px;
+    background-color: #f5f5f5;
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    font-size: 10pt;
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+.category_button:hover {
+    background-color: #e0e0e0;
+}
+
+.category_button.active {
+    background-color: var(--primary);
+    color: white;
+}
+
+/* Декорация формы */
+.decoration_left, .decoration_right {
+    position: absolute;
+    width: 15%;
+    height: auto;
+    opacity: 0.7;
+    transition: all 1.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    pointer-events: none;
+    transform-style: preserve-3d;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.decoration_left {
+    left: 5%;
+}
+
+.decoration_right {
+    right: 5%;
+}
+
+.decoration_left_pos1 {
+    left: 20%;
+    top: 18%;
+    transform: rotate(0deg);
+}
+
+.decoration_left_pos2 {
+    left: 24%;
+    top: 60%;
+    transform: rotate(180deg);
+}
+
+.decoration_right_pos1 {
+    top: 50%;
+    left: 80%;
+    transform: rotate(0deg) translateY(0);
+}
+
+.decoration_right_pos2 {
+    top: 24%;
+    left: 70%;
+    transform: rotate(-180deg) translateY(-20px);
+}
+
+/* Адаптив */
+@media (max-width: 900px) {
+    .form {
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+    }
+}
+
+@media (max-width: 1100px) {
+    .form.grid {
+        display: flex;
+        flex-direction: column;
+        overflow: auto;
+    }
+}

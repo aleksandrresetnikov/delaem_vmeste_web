@@ -1,0 +1,31 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "bun --watch src/app.ts",
+    "start": "NODE_ENV=production bun dist/app.js"
+  },
+  "private": true,
+  "devDependencies": {
+    "@types/nodemailer": "^6.4.17",
+    "@types/bun": "latest",
+    "@types/node": "^22.14.1",
+    "prisma": "^6.6.0",
+    "tsx": "^4.19.3"
+  },
+  "peerDependencies": {
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@elysiajs/cors": "^1.2.0",
+    "@elysiajs/jwt": "^1.2.0",
+    "@elysiajs/swagger": "^1.2.2",
+    "@prisma/client": "^6.6.0",
+    "axios": "^1.8.4",
+    "colors": "^1.4.0",
+    "dotenv": "^16.5.0",
+    "elysia": "^1.2.25",
+    "logestic": "^1.2.4",
+    "nodemailer": "^6.10.1"
+  }
+}

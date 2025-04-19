@@ -1,0 +1,93 @@
+.card {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 8px;
+
+    padding: 16px;
+    border-radius: 16px;
+
+    width: 290px;
+    height: 430px;
+
+    background: var(--accent);
+    overflow: hidden;
+
+    position: relative;
+    transition: .3s;
+}
+
+.card:hover {
+    transform: translateY(-1%);
+    cursor: pointer;
+}
+
+.imageBlock {
+    width: 100%;
+    height: 60%;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+}
+
+.image {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.text {
+    height: 40%;
+    display: flex;
+    justify-content: start;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cardHeader {
+    display: flex;
+}
+
+.description {
+    word-wrap: normal;
+    overflow: hidden;
+}
+
+.featureBlock {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+    z-index: 30;
+
+    background: rgba(234, 250, 255, 0.4);
+    backdrop-filter: blur(5);
+}
+
+
+.infoBadge {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+    z-index: 6;
+}
+
+.btnBlock {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    z-index: 20;
+    background: linear-gradient(0deg, rgb(232, 241, 255) 0%, rgba(232, 241, 255, 0) 30%);
+}
+
+
+.btnBlock button {
+    flex: 1;
+}
+
+:global(.dark) .gradient {
+    background: linear-gradient(0deg, rgb(32, 41, 55) 0%, rgba(32, 41, 55, 0) 30%);
+}

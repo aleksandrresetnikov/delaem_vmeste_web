@@ -1,0 +1,14 @@
+services:
+  backend:
+    restart: always
+    build:
+      context: ./backend
+    ports:
+      - "8015:8000"
+
+  frontend:
+    restart: always
+    build:
+      context: ./frontend
+    ports:
+      - "3015:3000"

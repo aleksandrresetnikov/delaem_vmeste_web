@@ -1,0 +1,15 @@
+.wrapper {
+    display: flex;
+    justify-content: center;
+    overflow-y: auto;
+    height: 100%;
+}
+
+.cardsGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    width: 100%;
+    height: max-content;
+    justify-content: center;
+}

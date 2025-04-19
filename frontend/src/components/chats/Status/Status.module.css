@@ -1,0 +1,22 @@
+.status {
+    width: 100%;
+    height: max-content;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 12px;
+}
+
+.status span {
+    opacity: 0.5;
+}
+
+.status * {
+    stroke: var(--primary);
+}
+
+.status, .status * {
+    color: var(--foreground);
+}

@@ -1,0 +1,90 @@
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-template-rows: max-content 1fr max-content;
+    gap: 16px;
+    width: 100%;
+    height: 100%;
+    grid-template-areas:
+            "search chat"
+            "list chat"
+            "list messageBox";
+    position: relative;
+}
+
+.grid > div {
+    border-radius: 16px;
+    box-shadow: rgba(25, 25, 25, 0.03) 0px 8px 24px;
+}
+
+.grid .search {
+    grid-area: search;
+}
+
+.grid .list {
+    grid-area: list;
+}
+
+.grid .chat {
+    grid-area: chat;
+}
+
+.grid .messageBox {
+    grid-area: messageBox;
+}
+
+.customInput {
+    appearance: none;
+    outline: none;
+    border: none;
+    background: var(--accent);
+    height: 100%;
+    width: 100%;
+    font-size: 14pt;
+    border-radius: 12px;
+    padding: 10px 24px;
+}
+
+@media (width < 651px) {
+    .grid {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .list {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .close_button {
+        display: block;
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        top: -18px;
+        left: -22px;
+        z-index: 1;
+    }
+}
+
+@media (width < 651px) {
+    .grid {
+        display: flex;
+        flex-direction: column;
+        max-height: 100vh;
+        border-radius: 16px;
+
+    }
+
+    .close_button {
+        display: block;
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        top: -18px;
+        left: -22px;
+        z-index: 1;
+    }
+}

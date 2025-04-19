@@ -1,0 +1,23 @@
+.header, .nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.header {
+    width: 100%;
+    height: max-content;
+
+    padding: 16px 40px;
+    border-radius: 16px;
+    background: var(--background);
+}
+
+.header * {
+    color: var(--primary);
+}
+
+.splitter {
+    flex-grow: 1;
+}

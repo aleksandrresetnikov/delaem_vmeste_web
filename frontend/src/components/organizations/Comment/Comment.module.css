@@ -1,0 +1,18 @@
+.wrapper {
+    width: 100%;
+
+    display: flex;
+    align-items: start;
+    justify-content: start;
+    flex-direction: column;
+
+    padding: 20px;
+
+    border-radius: 20px;
+    background-color: var(--secondary);
+}
+
+.wrapper span {
+    opacity: .5;
+    color: var(--primary);
+}

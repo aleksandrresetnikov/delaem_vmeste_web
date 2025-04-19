@@ -1,0 +1,33 @@
+.wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: fit-content;
+    padding: 0 4px;
+    gap: 4px;
+
+}
+
+.wrapper span {
+    z-index: 1;
+    user-select: none;
+    font-weight: 600;
+    line-height: 100%;
+    text-wrap: none;
+}
+
+.iconContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+
+    position: relative;
+}
+
+.icon {
+    fill: var(--primary);
+    stroke: none;
+    width: 60%;
+    height: 60%;
+}
