@@ -11,7 +11,7 @@ import {
   sendMessage,
   SendMessageData
 } from '@/api/chats';
-import {Chat} from "../../../backend/generated/prisma";
+import {Chat, Company, Message} from "../../../backend/generated/prisma";
 import {useMutation, useQuery, useQueryClient} from 'react-query';
 
 interface ChatContextType {
@@ -35,9 +35,21 @@ export interface ChatProviderProps {
   children: ReactNode;
 }
 
+export interface ExtendedMessageType extends Message {
+  content: {
+    text?: string;
+    ai?: boolean;
+  }
+}
+
+export interface ExtendedChatType extends Chat {
+  company: Company;
+  messages: ExtendedMessageType[];
+}
+
 export interface ChatInListProps {
   chatId: number;
-  chat: Chat;
+  chat: ExtendedChatType;
   id: number;
   userId: number;
 }

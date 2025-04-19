@@ -9,9 +9,9 @@ const Page = () => {
   const createOrg: boolean = searchParams.get("createOrg") !== null;
 
   return (
-      <div>
+      <>
         <Authorization asVolunteer={asVolunteer} createOrg={createOrg}/>
-      </div>
+      </>
   );
 };
 

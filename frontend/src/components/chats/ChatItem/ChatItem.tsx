@@ -8,6 +8,7 @@ const ChatItem = ({item}: { item: ChatInListProps }) => {
   let data;
 
   if (chat) data = chat.parseChat(item);
+  if(!data) return;
 
   return (
       <div className={styles.item} onClick={() => chat?.selectChat(item.chatId)}>
