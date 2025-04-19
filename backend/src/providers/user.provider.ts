@@ -15,7 +15,7 @@ export class UserProvider {
   }
 
   static getByEmail = async (email: string) => {
-    return await db.user.findUnique({where: {email}, include: {ownedCompany: {include: {links: true}}, memberCompany: true}}) || false;
+    return await db.user.findUnique({where: {email}, include: {ownedCompany: {include: {links: true, members: true}}, memberCompany: true}}) || false;
   }
 
   static addNew = async (email: string) => {
