@@ -14,8 +14,6 @@ const socketidToEmailMap = new Map<string, string>();
 export class WebRTCService {
     static runRtcServer = () => {
         io.on("connection", (socket: Socket) => {
-            console.log(`Socket Connected`, socket.id);
-          
             socket.on("room:join", (data: RoomJoinData) => {
                 const { email, room } = data;
                 emailToSocketIdMap.set(email, socket.id);
@@ -35,23 +33,20 @@ export class WebRTCService {
             });
           
             socket.on("peer:nego:needed", ({ to, offer }: NegotiationData) => {
-                console.log("peer:nego:needed", offer);
                 io.to(to).emit("peer:nego:needed", { from: socket.id, offer });
             });
           
             socket.on("peer:nego:done", ({ to, ans }: NegotiationData) => {
-                console.log("peer:nego:done", ans);
                 io.to(to).emit("peer:nego:final", { from: socket.id, ans });
             });
           
-            // socket.on("disconnect", () => {
-            //     const email = socketidToEmailMap.get(socket.id);
-            //     if (email) {
-            //         emailToSocketIdMap.delete(email);
-            //         socketidToEmailMap.delete(socket.id);
-            //         console.log(`Socket Disconnected`, socket.id);
-            //     }
-            // });
+            socket.on("disconnect", () => {
+                const email = socketidToEmailMap.get(socket.id);
+                if (email) {
+                    emailToSocketIdMap.delete(email);
+                    socketidToEmailMap.delete(socket.id);
+                }
+            });
         });
     }
 }
