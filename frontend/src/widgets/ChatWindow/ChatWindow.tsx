@@ -8,43 +8,87 @@ import useChat from "@/hooks/useChat";
 import {IMessage} from '@/api/chats';
 import useAuth from "@/hooks/useAuth";
 import LoadingWrapper from "@/components/chats/LoadingWrapper/LoadingWrapper";
+import AddRateModal from "@/modals/AddRateModal/AddRateModal";
+import OfferedOrganization from "@/components/chats/OfferedOrganization/OfferedOrganization";
+import OfferedOrganizationList from "@/widgets/OfferedOrganizationList/OfferedOrganizationList";
 
 const ChatWindow = () => {
-  const chat = useChat();
-  const auth = useAuth();
+    const chat = useChat();
+    const auth = useAuth();
 
-  const renderMessage = (item: IMessage) => {
-    if (!auth?.user?.id) return;
+    const renderMessage = (item: IMessage) => {
+        if (!auth?.user?.id) return;
 
-    if (item.type === "DEFAULT") {
-      return (
-          <Bubble
-              time={item.createdOn.toString()}
-              byMe={item.userId === auth.user.id && !item.content.ai}>
-            {item.content.text}
-          </Bubble>
-      )
+        if (item.type === "DEFAULT") {
+            return (
+                <Bubble
+                    time={item.createdOn.toString()}
+                    byMe={item.userId === auth.user.id && !item.content.ai}>
+                    {item.content.text}
+                </Bubble>
+            )
+        }
+        return (<Status loader={item.type === "STATUS_LOADING"}>{item.content.text}</Status>)
     }
 
-    return (<Status loader={item.type === "STATUS_LOADING"}>{item.content.text}</Status>)
-  }
+    return (
+        <div className={styles.wrapper}>
 
-  return (
-      <div className={styles.wrapper}>
-        {/* Профиль организации/юзера */}
-        {
-            chat?.currentChat && <div className={styles.profile}><UserProfile/></div>
-        }
+            {/* Нет чатов вообще */}
+            {
+                !chat?.isChats && <div className={styles.hint}>
+                    <h4>Опишите проблему</h4>
+                    <p>Мы подберем подходящее решение для Вас</p>
+                </div>
+            }
 
-        {
-            chat?.chatLoading && <LoadingWrapper/>
-        }
+            {/* Нет выбранного чата */}
+            {
+                chat?.selectedChat === -1 && chat?.isChats && <div className={styles.hint}>
+                    <h4>Выберите, с кем хотите связаться</h4>
+                </div>
+            }
 
-        {
-            chat?.messages && chat?.messages.map(item => renderMessage(item))
-        }
-      </div>
-  );
+            {/* Выбранный чат закрыт */}
+            {
+                chat?.currentChat?.isClosed && <div className={styles.hint}>
+                    <h4>Выберите, с кем хотите связаться</h4>
+                </div>
+            }
+
+            {/* Профиль организации/юзера */}
+            {
+                // chat?.currentChat &&
+                <div className={styles.profile}><UserProfile/></div>
+            }
+
+            {
+                chat?.chatLoading && <LoadingWrapper/>
+            }
+
+            {
+                chat?.messages && chat?.messages.map(item => renderMessage(item))
+            }
+
+            <OfferedOrganizationList/>
+
+            <Bubble
+                time={new Date().toString()}
+                byMe={true}>
+                {'item.content.text'}
+            </Bubble>
+            <Bubble
+                time={new Date().toString()}
+                byMe={false}>
+                {'item.content.text'}
+            </Bubble><Bubble
+            time={new Date().toString()}
+            byMe={true}>
+            {'item.content.text'}
+        </Bubble>
+
+        </div>
+    );
 };
 
 export default ChatWindow;

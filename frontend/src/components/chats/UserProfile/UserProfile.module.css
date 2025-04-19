@@ -5,8 +5,8 @@
     grid-template-rows: max-content max-content;
     gap: 0 12px;
     grid-template-areas:
-    "avatar name buttons"
-    "avatar last buttons";
+    "avatar name rate buttons"
+    "avatar last rate buttons";
 
     align-content: center;
     align-items: center;
@@ -34,6 +34,10 @@
     grid-area: last;
     opacity: 0.6;
     font-size: 10pt;
+}
+
+.addRate{
+    grid-area: rate;
 }
 
 .item .buttons {

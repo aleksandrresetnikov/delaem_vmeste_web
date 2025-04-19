@@ -1,12 +1,14 @@
 import OrganizationModal from "@/modals/OrganizationModal/OrganizationModal";
+import AddRateModal from "@/modals/AddRateModal/AddRateModal";
 
 
 const Modals = () => {
-  return (
-      <>
-        <OrganizationModal/>
-      </>
-  );
+    return (
+        <>
+            <AddRateModal/>
+            <OrganizationModal/>
+        </>
+    );
 };
 
 export default Modals;

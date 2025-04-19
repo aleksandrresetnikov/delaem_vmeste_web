@@ -30,6 +30,7 @@ export interface OrganizationData {
 export interface OrganizationCardData {
   id: string,
   title: string,
+  rate: number,
   description?: string,
   imageUrl?: string,
 }
@@ -62,4 +63,9 @@ export const removeOrganizationMember = async (userId: string) => {
 // Сгенерировать ссылку на организацию
 export const generateOrganizationLink = async (orgId: number) => {
   return await axios.post(`/company/link/${orgId}`);
+}
+
+// Оставить рейтинг об организации
+export const sendOrganizationRate = async (orgId: number) => {
+  // return await axios.post(`/company/rate/${orgId}`);
 }

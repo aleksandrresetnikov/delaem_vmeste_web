@@ -1,5 +1,5 @@
 "use client";
-import React, {createContext, ReactNode, useCallback} from 'react';
+import React, {createContext, ReactNode, useCallback, useMemo, useState} from 'react';
 import {
   createChat,
   CreateChatData,
@@ -20,6 +20,7 @@ interface ChatContextType {
   selectedChat: number;
   selectChat: (id: number) => void;
   chatList: ChatInListProps[];
+  isChats: boolean,
   currentChat: IChatInfo | null;
   messages: IMessage[];
   createNewChat: (data: CreateChatData) => Promise<void>;
@@ -63,8 +64,8 @@ export interface UIChatData {
 export const ChatProvider = ({children}: ChatProviderProps) => {
   const queryClient = useQueryClient();
   const [selectedChat, setSelectedChat] = React.useState<number>(-1);
-  const [searchQuery, setSearchQuery] = React.useState<string>('');
 
+  const [searchQuery, setSearchQuery] = React.useState<string>('');
   // Запрос для списка чатов
   const {
     data: chatList = [],
@@ -184,12 +185,18 @@ export const ChatProvider = ({children}: ChatProviderProps) => {
     }
   }, [sendMessageMutation]);
 
+
+
+  const isChats = useMemo(() => chatList && chatList.length > 0, [chatList]);
+
+
   const value = {
     listLoading,
     chatLoading: chatInfoLoading || messagesLoading,
     selectedChat,
     selectChat,
     chatList,
+    isChats,
     currentChat,
     messages,
     setSearchQuery,

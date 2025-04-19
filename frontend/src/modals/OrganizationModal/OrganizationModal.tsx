@@ -11,7 +11,7 @@ import {Button} from "@/components/ui/button";
 import {useAsync} from "react-use";
 
 //функции помогаторы
-const correctWordForm = (count: number): string => {
+export const correctWordForm = (count: number): string => {
   if (count % 10 === 1 && count % 100 !== 11) {
     return "Доброе дело";
   } else if (

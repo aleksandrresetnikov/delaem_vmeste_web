@@ -6,7 +6,7 @@ import {cn} from "@/lib/utils";
 
 interface InfoBadgeProps {
   type: 'likes' | 'rate',
-  count: number,
+  count?: number,
   text?: string,
   className?: string
 }
