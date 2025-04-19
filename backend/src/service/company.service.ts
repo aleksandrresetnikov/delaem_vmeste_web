@@ -10,11 +10,8 @@ export class CompanyService {
     return await CompanyProvider.getByID(id);
   }
 
-  static async createCompany(name: string, ownerId: number) {
-    const company = await CompanyProvider.addCompany(name, ownerId, []);
-    await UserProvider.update(ownerId, {companyId: company.id});
-
-    return company;
+  static async createCompany(name: string, description: string, ownerId: number) {
+    return await CompanyProvider.addCompany(name, description, ownerId, [ownerId]);
   }
 
   static async addCompanyMember(companyId: number, userId: number) {

@@ -2,6 +2,7 @@ import {t} from "elysia";
 
 export const PostCompanyDto = t.Object(
     {
-      name: t.String({})
+      name: t.String({}),
+      description: t.String()
     }
 )
