@@ -29,7 +29,7 @@ const Messages = () => {
           {(chat?.selectedChat !== -1 || !isMobile) && (
               <>
                 {/* Главное окно чата */}
-                <ChevronLeft onClick={() => chat?.selectChat(-1)} className={styles.close_button}></ChevronLeft>
+                {isMobile && <ChevronLeft onClick={() => chat?.selectChat(-1)} className={styles.close_button}></ChevronLeft>}
                 <div className={styles.chat}><ChatWindow/></div>
 
                 {/* Поле для ввода сообщения */}
