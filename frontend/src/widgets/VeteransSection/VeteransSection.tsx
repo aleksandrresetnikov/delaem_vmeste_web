@@ -2,9 +2,11 @@ import s from './VeteransSection.module.css'
 import React from 'react';
 import Image from "next/image";
 import ActionButton from "@/components/shared/ActionButton/ActionButton";
-
+import {useRouter} from "next/navigation";
 
 const VeteransSection = () => {
+  const router = useRouter();
+
   return (
       <div className={s.wrapper} id={"veterans"}>
           <h2>Мы помним</h2>
@@ -16,9 +18,9 @@ const VeteransSection = () => {
           <ActionButton
               action={'Я ветеран'}
               variant='destructive'
+              onClick={() => router.push("/auth")}
           />
           <div className={s.imageBlock}>
-
               <Image
                   src={'/icons/george.png'}
                   width={1000}
@@ -29,6 +31,7 @@ const VeteransSection = () => {
           <video className={s.video} autoPlay muted loop playsInline>
               <source src="/sparkles.webm" type="video/webm"/>
           </video>
+
       </div>
   );
 };

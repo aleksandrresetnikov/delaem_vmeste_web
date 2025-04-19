@@ -11,9 +11,5 @@ export const HomeHeaderData: IHeaderUrl[] = [
   {
     title: "Организации",
     url: "/organizations"
-  },
-  {
-    title: "блабла",
-    url: "/blabla"
   }
 ];
