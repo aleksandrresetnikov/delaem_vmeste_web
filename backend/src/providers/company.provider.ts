@@ -51,7 +51,7 @@ export class CompanyProvider {
     }) || false;
   }
 
-  static addCompany = async (name: string, ownerId: number, members: number[]) => {
+  static addCompany = async (name: string, description: string, ownerId: number, members: number[]) => {
     // проверяем если members не содержит в себе владельца, то добавляем егр
     if (members.indexOf(ownerId) == -1) members.push(ownerId);
 
@@ -61,6 +61,7 @@ export class CompanyProvider {
       data: {
         name,
         ownerId,
+        description,
         members: {
           connect: membersData
         }
