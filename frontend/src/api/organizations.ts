@@ -4,6 +4,7 @@ import {AxiosResponse} from "axios";
 // Интерфейсы данных
 export interface CreateOrganizationData {
   name: string;
+  description: string;
 }
 
 // Комментарий

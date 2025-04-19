@@ -18,9 +18,10 @@ import {Textarea} from "@/components/ui/textarea";
 import {IFormResult} from "@/widgets/Authorization/types";
 import {fetchProfileUpdate} from "@/api/profile";
 import {useRouter} from "next/navigation";
+import {createOrganization} from "@/api/organizations";
 
 const Authorization = ({asVolunteer}: { asVolunteer: boolean }) => {
-  const [step, setStep] = useState<number>(STEPS.EMAIL);
+  const [step, setStep] = useState<number>(STEPS.ORGANIZATION);
   const [loading, setLoading] = useState(false);
 
   const [code, setCode] = useState<number>(0);
@@ -28,6 +29,8 @@ const Authorization = ({asVolunteer}: { asVolunteer: boolean }) => {
 
   const [animationKey, setAnimationKey] = useState<number>(0);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+
+  const [organizationData, setOrganizationData] = useState<{name: string, description: string}>({name: "", description: ""});
 
   const [timeLeft, setTimeLeft] = useState<number>(TIMER_INITIAL_VALUE);
 
@@ -58,6 +61,8 @@ const Authorization = ({asVolunteer}: { asVolunteer: boolean }) => {
         return "Укажите свою электронную почту";
       case STEPS.CODE:
         return `Введите код, отправленный на <b>${email}</b>`;
+      case STEPS.ORGANIZATION:
+        return `Организация позволит вам связываться с нуждающимися`;
       default:
         return `Заполните данные для завершения регистрации`;
     }
@@ -140,12 +145,29 @@ const Authorization = ({asVolunteer}: { asVolunteer: boolean }) => {
         username: email.split("@")[0],
         role: asVolunteer ? "VOLUNTEER" : "MEMBER"
       });
-      router.push("/messages");
+      if (asVolunteer) {
+        setStep(STEPS.ORGANIZATION)
+      } else {
+        router.push("/messages");
+      }
     } catch (e: any) {
       console.error(e);
       toast.error("Не удалось сохранить профиль " + e.toString());
     }
   };
+
+  // Создать организацию
+  const handleOrganizationCreate = async () => {
+    if(organizationData.name === "" || organizationData.description === "") return;
+
+    try {
+      await createOrganization(organizationData);
+      router.push("/messages");
+    } catch (e: any) {
+      console.error(e);
+      toast.error("Не удалось создать организацию. " + e.toString());
+    }
+  }
 
   // Рендер формы ввода email
   const renderEmailForm = () => {
@@ -279,6 +301,19 @@ const Authorization = ({asVolunteer}: { asVolunteer: boolean }) => {
     )
   }
 
+  const renderOrganizationAsk = () => {
+    return (
+        <div className={s.completionForm}>
+          <div className={s.orgSelectForm}>
+            <Input type={"text"} placeholder={"Название организации"} onChange={(e) => setOrganizationData({...organizationData, name: e.target.value})} />
+            <Textarea placeholder={"Описание вашей организации (чем она занимается?)"} onChange={(e) => setOrganizationData({...organizationData, description: e.target.value})} />
+            <Button onClick={handleOrganizationCreate}>Создать сейчас!</Button>
+            <Button variant="link" onClick={() => router.push("/messages")}>Создам позже или войду по ссылке</Button>
+          </div>
+        </div>
+    )
+  }
+
   // При заполнении всего OTP-кода
   useAsync(async () => {
     if (code < 1000 || code > 9999) return;
@@ -291,7 +326,7 @@ const Authorization = ({asVolunteer}: { asVolunteer: boolean }) => {
     if (!auth?.loading) {
       if (auth?.user) {
         // Если юзер уже залогинен
-        setStep(STEPS.COMPLETE);
+        // setStep(STEPS.COMPLETE);
       }
     }
   }, [auth?.loading, auth?.user]);
@@ -303,13 +338,13 @@ const Authorization = ({asVolunteer}: { asVolunteer: boolean }) => {
             alt="Decoration"
             className={`${s.decoration_left} ${step === STEPS.EMAIL ? s.decoration_left_pos1 : s.decoration_left_pos2}`}
         />
-        <img
-            src="/glass-element-49.png"
-            alt="Decoration"
-            className={`${s.decoration_right} ${step === STEPS.EMAIL ? s.decoration_right_pos1 : s.decoration_right_pos2}`}
-        />
+        {/*<img*/}
+        {/*    src="/glass-element-49.png"*/}
+        {/*    alt="Decoration"*/}
+        {/*    className={`${s.decoration_right} ${step === STEPS.EMAIL ? s.decoration_right_pos1 : s.decoration_right_pos2}`}*/}
+        {/*/>*/}
 
-        <div className={cn(s.form, (step === STEPS.COMPLETE) && s.grid)}>
+        <div className={cn(s.form, (step === STEPS.COMPLETE || step === STEPS.ORGANIZATION) && s.grid)}>
           <div className={s.gridTitles}>
             <h1
                 key={`title-${animationKey}`}
@@ -327,7 +362,8 @@ const Authorization = ({asVolunteer}: { asVolunteer: boolean }) => {
 
           {step === STEPS.EMAIL && renderEmailForm()}
           {step === STEPS.CODE && (!loading ? renderCodeForm() : null)}
-          {(step === STEPS.COMPLETE) && renderProfileFillForm()}
+          {step === STEPS.COMPLETE && renderProfileFillForm()}
+          {step === STEPS.ORGANIZATION && renderOrganizationAsk()}
         </div>
       </main>
   );

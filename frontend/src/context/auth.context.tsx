@@ -27,6 +27,7 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
     if (token) {
       fetchProfile()
           .then((response) => {
+            console.log(response.data);
             setUser(response.data);
           })
           .catch(() => {

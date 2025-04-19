@@ -8,21 +8,25 @@ import {ThemeSwitch} from "@/components/shared/ThemeSwitch/ThemeSwitch";
 import {Button} from "@/components/ui/button";
 import {Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger} from "@/components/ui/sheet";
 import {Menu} from "lucide-react";
+import useAuth from "@/hooks/useAuth";
 
 const HomeHeader = () => {
   const [open, setOpen] = useState(false);
+  const auth = useAuth();
 
   return (
       <div className={styles.header}>
         {/* Логотип */}
-        <Link href={'/'} className={styles.logoContainer}>
-          <Image
-              src={'/icons/logo.png'}
-              width={48}
-              height={48}
-              alt={'Логотип Вместе Лучше'}
-          />
-          <b>Вместе Лучше</b>
+        <Link href={'/'}>
+          <div className={styles.logoContainer}>
+            <Image
+                src={'/icons/logo.png'}
+                width={48}
+                height={48}
+                alt={'Логотип Вместе Лучше'}
+            />
+            <b>Вместе Лучше</b>
+          </div>
         </Link>
 
         {/* Разрыв (только для десктопа) */}
@@ -35,6 +39,8 @@ const HomeHeader = () => {
                 <Link key={item.title} href={item.url}>{item.title}</Link>
             ))}
           </nav>
+
+          {auth?.user?.memberCompany && <Button variant={"outline"}>Ваша организация</Button>}
 
           <ThemeSwitch/>
         </div>
@@ -60,6 +66,7 @@ const HomeHeader = () => {
                       </Button>
                     </Link>
                 ))}
+                {auth?.user?.memberCompany && <Button variant={"outline"}>Ваша организация</Button>}
               </div>
             </SheetContent>
           </Sheet>
