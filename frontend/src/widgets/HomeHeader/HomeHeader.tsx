@@ -7,12 +7,71 @@ import Image from "next/image";
 import {ThemeSwitch} from "@/components/shared/ThemeSwitch/ThemeSwitch";
 import {Button} from "@/components/ui/button";
 import {Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger} from "@/components/ui/sheet";
-import {Menu} from "lucide-react";
+import {Copy, Menu} from "lucide-react";
 import useAuth from "@/hooks/useAuth";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
+import {Input} from "@/components/ui/input";
+import {User} from "prisma-client-45545ba697cc4784aab4e48e93f883a0ef70eced577eefae45ed1be0665c6d35";
+import {toast} from "sonner";
 
 const HomeHeader = () => {
   const [open, setOpen] = useState(false);
   const auth = useAuth();
+
+  const copyToClipboard = (text: string) => {navigator.clipboard.writeText(text)};
+
+  const copyLink = () => {
+    copyToClipboard(`https://some.link/join/${auth?.user?.ownedCompany.links[0].link || ""}`);
+    toast.success("Ссылка скопирована!");
+  }
+
+  const renderOrganizationDropdown = () => {
+    if(!auth?.user?.ownedCompany || !auth?.user?.memberCompany) return;
+
+    return (<DropdownMenu>
+      <DropdownMenuTrigger><Button variant={"outline"}>Ваша организация</Button></DropdownMenuTrigger>
+      <DropdownMenuContent>
+        {/* Название организации */}
+        <DropdownMenuLabel>Название</DropdownMenuLabel>
+        <DropdownMenuItem>
+          {auth?.user?.ownedCompany.name || auth?.user?.memberCompany.name}
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+
+        {
+          auth?.user?.ownedCompany && (
+              <>
+                <DropdownMenuLabel>Ссылка на вступление в организацию</DropdownMenuLabel>
+                <DropdownMenuItem>
+                  <Input type={"text"} value={`https://some.link/join/${auth?.user?.ownedCompany.links[0].link || ""}`} />
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={copyLink}>
+                  <Button>Скопировать ссылку</Button>
+                </DropdownMenuItem>
+
+                <DropdownMenuSeparator />
+
+                <DropdownMenuLabel>Список участников</DropdownMenuLabel>
+                {
+                  auth.user.ownedCompany.members.map((item: User) => (
+                      <DropdownMenuItem>
+                        {item.fullname}
+                      </DropdownMenuItem>
+                  ))
+                }
+              </>
+            )
+        }
+      </DropdownMenuContent>
+    </DropdownMenu>)
+  }
 
   return (
       <div className={styles.header}>
@@ -40,7 +99,7 @@ const HomeHeader = () => {
             ))}
           </nav>
 
-          {auth?.user?.memberCompany && <Button variant={"outline"}>Ваша организация</Button>}
+          {renderOrganizationDropdown()}
 
           <ThemeSwitch/>
         </div>
@@ -66,7 +125,7 @@ const HomeHeader = () => {
                       </Button>
                     </Link>
                 ))}
-                {auth?.user?.memberCompany && <Button variant={"outline"}>Ваша организация</Button>}
+                {renderOrganizationDropdown()}
               </div>
             </SheetContent>
           </Sheet>
