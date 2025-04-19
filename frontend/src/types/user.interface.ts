@@ -1,4 +1,12 @@
-import {Company} from "../../../backend/generated/prisma";
+import {Company, User} from "../../../backend/generated/prisma";
+
+interface ExtendedCompany extends Company {
+  links?: {
+    id: number;
+    link: string;
+  }[];
+  members: User[];
+}
 
 export interface IUser {
   id: number;
@@ -11,7 +19,7 @@ export interface IUser {
 
   role: IUserRole;
   memberCompany: Company;
-  ownedCompany: Company;
+  ownedCompany: ExtendedCompany;
 }
 
 export type IUserRole = "MEMBER" | "ADMIN" | "VOLUNTEER";

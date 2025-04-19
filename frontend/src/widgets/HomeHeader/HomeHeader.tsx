@@ -7,7 +7,7 @@ import Image from "next/image";
 import {ThemeSwitch} from "@/components/shared/ThemeSwitch/ThemeSwitch";
 import {Button} from "@/components/ui/button";
 import {Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger} from "@/components/ui/sheet";
-import {Copy, Menu} from "lucide-react";
+import {Menu} from "lucide-react";
 import useAuth from "@/hooks/useAuth";
 import {
   DropdownMenu,
@@ -18,22 +18,25 @@ import {
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import {Input} from "@/components/ui/input";
-import {User} from "prisma-client-45545ba697cc4784aab4e48e93f883a0ef70eced577eefae45ed1be0665c6d35";
+import {User} from "../../../../backend/generated/prisma";
 import {toast} from "sonner";
 
 const HomeHeader = () => {
   const [open, setOpen] = useState(false);
   const auth = useAuth();
 
-  const copyToClipboard = (text: string) => {navigator.clipboard.writeText(text)};
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text)
+  };
 
   const copyLink = () => {
+    if(!auth?.user?.ownedCompany.links) return;
     copyToClipboard(`https://some.link/join/${auth?.user?.ownedCompany.links[0].link || ""}`);
     toast.success("Ссылка скопирована!");
   }
 
   const renderOrganizationDropdown = () => {
-    if(!auth?.user?.ownedCompany || !auth?.user?.memberCompany) return;
+    if (!auth?.user?.ownedCompany || !auth?.user?.memberCompany) return;
 
     return (<DropdownMenu>
       <DropdownMenuTrigger><Button variant={"outline"}>Ваша организация</Button></DropdownMenuTrigger>
@@ -43,30 +46,30 @@ const HomeHeader = () => {
         <DropdownMenuItem>
           {auth?.user?.ownedCompany.name || auth?.user?.memberCompany.name}
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
+        <DropdownMenuSeparator/>
 
         {
-          auth?.user?.ownedCompany && (
-              <>
-                <DropdownMenuLabel>Ссылка на вступление в организацию</DropdownMenuLabel>
-                <DropdownMenuItem>
-                  <Input type={"text"} value={`https://some.link/join/${auth?.user?.ownedCompany.links[0].link || ""}`} />
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={copyLink}>
-                  <Button>Скопировать ссылку</Button>
-                </DropdownMenuItem>
+            auth?.user?.ownedCompany && auth?.user?.ownedCompany.links && (
+                <>
+                  <DropdownMenuLabel>Ссылка на вступление в организацию</DropdownMenuLabel>
+                  <DropdownMenuItem>
+                    <Input type={"text"} value={`https://some.link/join/${auth?.user?.ownedCompany.links[0].link || ""}`}/>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={copyLink}>
+                    <Button>Скопировать ссылку</Button>
+                  </DropdownMenuItem>
 
-                <DropdownMenuSeparator />
+                  <DropdownMenuSeparator/>
 
-                <DropdownMenuLabel>Список участников</DropdownMenuLabel>
-                {
-                  auth.user.ownedCompany.members.map((item: User) => (
-                      <DropdownMenuItem>
-                        {item.fullname}
-                      </DropdownMenuItem>
-                  ))
-                }
-              </>
+                  <DropdownMenuLabel>Список участников</DropdownMenuLabel>
+                  {
+                    auth.user.ownedCompany.members.map((item: User, i: number) => (
+                        <DropdownMenuItem key={i}>
+                          {item.fullname}
+                        </DropdownMenuItem>
+                    ))
+                  }
+                </>
             )
         }
       </DropdownMenuContent>

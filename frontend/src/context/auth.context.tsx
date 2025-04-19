@@ -29,7 +29,6 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
 
     try {
       const response = await fetchProfile();
-      console.log(response.data);
       setUser(response.data);
       setLoading(false);
       return response.data;

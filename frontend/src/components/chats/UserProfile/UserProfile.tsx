@@ -8,11 +8,12 @@ const UserProfile = () => {
   const chat = useChat();
   const [data, setData] = useState<UIChatData | boolean>(false);
 
-  if (!chat) return null;
-
   useEffect(() => {
+    if (!chat) return;
     if (chat.currentChat) setData(chat.getCurrentProfileInfo());
-  }, [chat.currentChat]);
+  }, [chat?.currentChat]);
+
+  if (!chat) return null;
 
   if (typeof data === "boolean") return null;
 
