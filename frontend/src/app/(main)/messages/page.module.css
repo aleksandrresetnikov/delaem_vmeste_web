@@ -45,6 +45,13 @@
     padding: 10px 24px;
 }
 
+.hasNotChats {
+    grid-template-areas:
+            "chat chat"
+            "chat chat"
+            "messageBox messageBox" !important;
+}
+
 @media (width < 651px) {
     .grid {
         display: flex;

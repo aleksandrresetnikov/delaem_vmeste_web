@@ -1,5 +1,5 @@
 "use client";
-import React, {createContext, ReactNode, useCallback} from 'react';
+import React, {createContext, ReactNode, useCallback, useMemo, useState} from 'react';
 import {
   createChat,
   CreateChatData,
@@ -11,7 +11,7 @@ import {
   sendMessage,
   SendMessageData
 } from '@/api/chats';
-import {Chat} from "../../../backend/generated/prisma";
+import {Chat, Company, Message} from "../../../backend/generated/prisma";
 import {useMutation, useQuery, useQueryClient} from 'react-query';
 
 interface ChatContextType {
@@ -20,13 +20,15 @@ interface ChatContextType {
   selectedChat: number;
   selectChat: (id: number) => void;
   chatList: ChatInListProps[];
+  isChats: boolean,
   currentChat: IChatInfo | null;
   messages: IMessage[];
   createNewChat: (data: CreateChatData) => Promise<void>;
   fetchChatInfo: (chatId: number) => Promise<void>;
   sendNewMessage: (chatId: number, data: SendMessageData) => Promise<void>;
   parseChat: (data: ChatInListProps) => UIChatData;
-  getCurrentProfileInfo: () => UIChatData | boolean;
+  getCurrentProfileInfo: (myChatId: number) => UIChatData | boolean;
+  invalidateData: () => void;
 }
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
@@ -35,9 +37,21 @@ export interface ChatProviderProps {
   children: ReactNode;
 }
 
+export interface ExtendedMessageType extends Message {
+  content: {
+    text?: string;
+    ai?: boolean;
+  }
+}
+
+export interface ExtendedChatType extends Chat {
+  company: Company;
+  messages: ExtendedMessageType[];
+}
+
 export interface ChatInListProps {
   chatId: number;
-  chat: Chat;
+  chat: ExtendedChatType;
   id: number;
   userId: number;
 }
@@ -51,8 +65,8 @@ export interface UIChatData {
 export const ChatProvider = ({children}: ChatProviderProps) => {
   const queryClient = useQueryClient();
   const [selectedChat, setSelectedChat] = React.useState<number>(-1);
-  const [searchQuery, setSearchQuery] = React.useState<string>('');
 
+  const [searchQuery, setSearchQuery] = React.useState<string>('');
   // Запрос для списка чатов
   const {
     data: chatList = [],
@@ -120,6 +134,11 @@ export const ChatProvider = ({children}: ChatProviderProps) => {
     setSelectedChat(id);
   }, []);
 
+  // Перезагрузить все динамические данные
+  const invalidateData = async () => {
+    setTimeout(async () => await queryClient.refetchQueries({queryKey: ['chats', 'messages']}), 150);
+  }
+
   const parseChat = (data: ChatInListProps) => {
     const username = data.chat.companyId === null ? "Новый чат" : data.chat.company?.name || "Неизвестный чат";
     const msg = data.chat.messages[0]?.content?.text || "";
@@ -132,10 +151,18 @@ export const ChatProvider = ({children}: ChatProviderProps) => {
   }
 
   // Получить инфо о профиле
-  const getCurrentProfileInfo = () => {
+  const getCurrentProfileInfo = (myUserId: number) => {
     if (!currentChat) return false;
+    let username: string = "";
 
-    const username = !currentChat.company ? "Новый чат" : currentChat.company?.name || "Неизвестный чат";
+    if(currentChat.users[0] && currentChat.users[0].id !== myUserId) {
+      // Если сообщение отправлено не мной
+      username = !currentChat.users[0].fullname ? "Новый чат" : currentChat.users[0].fullname || "Неизвестный чат";
+    } else {
+      // Если мной
+      username = !currentChat.company ? "Новый чат" : currentChat.company?.name || "Неизвестный чат";
+    }
+
     const msg = currentChat.messages[0]?.content?.text || "";
 
     return {
@@ -172,12 +199,18 @@ export const ChatProvider = ({children}: ChatProviderProps) => {
     }
   }, [sendMessageMutation]);
 
+
+
+  const isChats = useMemo(() => chatList && chatList.length > 0, [chatList]);
+
+
   const value = {
     listLoading,
     chatLoading: chatInfoLoading || messagesLoading,
     selectedChat,
     selectChat,
     chatList,
+    isChats,
     currentChat,
     messages,
     setSearchQuery,
@@ -185,7 +218,8 @@ export const ChatProvider = ({children}: ChatProviderProps) => {
     fetchChatInfo,
     sendNewMessage,
     parseChat,
-    getCurrentProfileInfo
+    getCurrentProfileInfo,
+    invalidateData
   };
 
   return (

@@ -1,17 +1,17 @@
 import s from './ActionButton.module.css'
-import React from 'react';
+import React, {HTMLAttributes} from 'react';
 import Image from "next/image";
 import {Button} from "@/components/ui/button";
 
-interface IActionButtonProps {
+interface IActionButtonProps extends HTMLAttributes<HTMLButtonElement>{
   action: string,
   variant?: "link" | "default" | "destructive" | "outline" | "secondary" | "ghost" | null | undefined;
 }
 
-const ActionButton = ({action, variant}: IActionButtonProps) => {
+const ActionButton = (props: IActionButtonProps) => {
   return (
-      <Button className={s.container} size='xl' variant={variant}>
-        <h4>{action}</h4>
+      <Button className={s.container} size='xl' variant={props.variant} {...props}>
+        <h4>{props.action}</h4>
         <Image
             src={'/icons/arrow.svg'}
             width={40}

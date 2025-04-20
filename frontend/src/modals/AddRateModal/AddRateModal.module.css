@@ -1,0 +1,18 @@
+.wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.contentWrapper{
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+    padding: 10px;
+}
+
+.contentWrapper h2{
+    color: var(--primary);
+}

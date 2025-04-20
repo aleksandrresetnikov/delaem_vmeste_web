@@ -5,6 +5,7 @@ import "../styles/fonts.css"
 import PagePreloader from "@/components/shared/PagePreloader/PagePreloader";
 import {Providers} from "@/providers";
 import Modals from "@/modals/index";
+import {Suspense} from "react";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -28,7 +29,9 @@ export default function RootLayout({
       >
       <Providers>
         <Modals/>
-        {children}
+        <Suspense fallback={null}>
+          {children}
+        </Suspense>
       </Providers>
       <PagePreloader/>
       </body>

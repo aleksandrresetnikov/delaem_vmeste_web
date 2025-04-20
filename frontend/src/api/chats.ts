@@ -4,7 +4,7 @@ import {ChatReview, ChatToUser, Company, MessageType} from "../../../backend/gen
 import {ChatInListProps} from "@/context/chat.context";
 
 export interface CreateChatData {
-  users: number[];
+  prompt: string;
 }
 
 export interface GetMessagesParams {
@@ -45,7 +45,9 @@ export interface IChatInfo {
 }
 
 export interface SendMessageData {
-  text: string;
+  content: {
+    text: string;
+  }
 }
 
 // Получить чаты
@@ -69,6 +71,15 @@ export const getChatById = async (chatId: number) => {
   return await axios.get(`/chat/${chatId}`);
 }
 
+// Выбрать организацию для чата
+export const selectChatOrganization = async (chatId: number, organizationId: number) => {
+  return await axios.patch(`/chat/${chatId}/organization/${organizationId}`, {});
+}
+
+// Выбрать организацию для чата
+export const closeChat = async (chatId: number) => {
+  return await axios.patch(`/chat/close/${chatId}`, {});
+}
 
 // Получить сообщения в чате
 export const getChatMessages = async (chatId: number, params?: GetMessagesParams) => {

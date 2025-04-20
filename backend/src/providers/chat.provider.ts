@@ -80,7 +80,8 @@ export class ChatProvider {
           }
         },
         messages: true,
-        company: true
+        company: true,
+        reviews: true
       }
     });
 

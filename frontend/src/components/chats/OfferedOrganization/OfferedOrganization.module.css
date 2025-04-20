@@ -1,0 +1,18 @@
+.wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+    border-radius: 20px;
+    background-color: var(--secondary);;
+}
+
+.wrapper:hover{
+    cursor: pointer;
+}
+
+.wrapper img{
+    border-radius: 100%;
+}

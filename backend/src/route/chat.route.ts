@@ -71,8 +71,9 @@ authRoutes.patch("/:chatId/organization/:organizationId", async (ctx) => {
       }})
 
     for(let member of organizationData.members) {
-      if(organizationData.members.map(item => item.id).includes(member.id)) continue;
-      await ChatProvider.addUserToChat(member.id, chatId);
+      if(!chatData.users.map(item => item.id).includes(member.id)) {
+        await ChatProvider.addUserToChat(member.id, chatId);
+      }
     }
   } catch (err) {
     ctx.set.status = 500;

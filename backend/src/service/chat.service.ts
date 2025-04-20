@@ -56,6 +56,10 @@ export class ChatService {
     const closeData = await ChatProvider.isChatClosed(chatId);
     if (closeData && closeData.isClosed) return false;
 
+    await ChatProvider.addMessage(userId, chatId, "STATUS", {
+      text: "Чат закрыт"
+    })
+
     return await ChatProvider.closeChat(chatId);
   }
 

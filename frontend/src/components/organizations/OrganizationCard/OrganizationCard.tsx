@@ -5,21 +5,21 @@ import {OrganizationCardData} from "@/api/organizations";
 import useModal from "@/hooks/useModal";
 import InfoBadge from "@/components/organizations/InfoBadge/InfoBadge";
 import {Button} from "@/components/ui/button";
+import {correctWordForm} from "@/modals/OrganizationModal/OrganizationModal";
 
-const OrganizationCard: FC<OrganizationCardData> = ({id, imageUrl, title, description}) => {
+const OrganizationCard: FC<OrganizationCardData> = ({id, imageUrl, rate, title, description}) => {
   const modal = useModal()
   if (!modal) return
 
   const handleOpenModal = () => {
-    const organizationModal: OrganizationCardData = {id, imageUrl, title, description}
-    modal.switchModal('organization', {organizationModal})
+    modal.switchModal('organization', {organizationModal: {id}})
   }
 
   return (
       <div className={s.card} title="Подробнее" onClick={handleOpenModal}>
         <div className={s.imageBlock}>
           <img className={s.image} width={200} height={200} alt={title} src={imageUrl || '/icons/heart.png'}/>
-          <InfoBadge className={s.infoBadge} type='likes' count={12}/>
+          <InfoBadge className={s.infoBadge} type='likes' count={12} text={correctWordForm(rate)}/>
         </div>
 
         <div className={s.text}>

@@ -5,7 +5,7 @@ export interface ProfileData {
   username: string;
   fullname: string;
   birthDate: string;
-  role: IUserRole;
+  role: IUserRole | undefined;
 }
 
 // Получение профиля
