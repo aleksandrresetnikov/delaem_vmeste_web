@@ -53,7 +53,8 @@ export class ChatService {
   static closeChat = async (userId: number, chatId: number) => {
     if (!await ChatProvider.hasUserInChat(chatId, userId)) return false;
 
-    if (await ChatProvider.isChatClosed(chatId)) return false;
+    const closeData = await ChatProvider.isChatClosed(chatId);
+    if (closeData && closeData.isClosed) return false;
 
     return await ChatProvider.closeChat(chatId);
   }

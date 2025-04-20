@@ -6,6 +6,13 @@ export const PostChatGptBody = t.Object(
     }
 );
 
+export const ChatOrganizationPatchDto = t.Object(
+    {
+      chatId: t.Number(),
+      organizationId: t.Number()
+    }
+)
+
 export const GetChatMessagesBodyDto = t.Object(
     {
       page: t.Optional(t.Number({minimum: 1})),

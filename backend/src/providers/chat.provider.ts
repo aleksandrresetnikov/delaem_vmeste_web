@@ -17,6 +17,7 @@ export class ChatProvider {
       include: {
         chat: {
           include: {
+            company: true,
             users: {
               include: {
                 user: true // Полная информация о пользователях в чате
@@ -153,10 +154,10 @@ export class ChatProvider {
   }
 
   static isChatClosed = async (chatId: number) => {
-    return await db, chatId
+    return await db.chat.findUnique({where:{id: chatId}, select: {isClosed: true}});
   }
 
   static closeChat = async (chatId: number) => {
-    return await this.update(chatId, {isClosed: true});
+    return await db.chat.update({where: {id: chatId}, data: {isClosed: true}});
   }
 }
