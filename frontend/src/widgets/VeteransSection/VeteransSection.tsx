@@ -1,3 +1,4 @@
+"use client";
 import s from './VeteransSection.module.css'
 import React from 'react';
 import Image from "next/image";
