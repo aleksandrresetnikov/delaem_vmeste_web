@@ -13,27 +13,7 @@ import useChat from "@/hooks/useChat";
 import { toast } from 'sonner';
 import {selectChatOrganization} from "@/api/chats";
 import LoadingWrapper from "@/components/chats/LoadingWrapper/LoadingWrapper";
-
-//функции помогаторы
-export const correctWordForm = (count: number): string => {
-    if (count % 10 === 1 && count % 100 !== 11) {
-        return "Доброе дело";
-    } else if (
-        count % 10 >= 2 &&
-        count % 10 <= 4 &&
-        (count % 100 < 10 || count % 100 >= 20)
-    ) {
-        return "Добрых дела";
-    } else {
-        return "Добрых дел";
-    }
-}
-const checkRate = (rate: number): string => {
-    if (0 <= rate && rate <= 2) return 'Организация сомнительная'
-    else if (2 < rate && rate <= 3.5) return 'Организация нормальная'
-    else if (3.5 < rate && rate <= 5) return 'Организация Хорошая'
-    else return 'Организация сомнительная'
-}
+import {checkRate, correctWordForm} from "@/helpers/organiztion.helpers";
 
 
 const ShowContent = (data: OrganizationData) => {

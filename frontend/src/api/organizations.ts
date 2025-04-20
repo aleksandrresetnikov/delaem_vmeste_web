@@ -26,19 +26,27 @@ export interface OrganizationData {
   reviews: IComment[]
 }
 
+export interface IStats{
+  totalChats: number,
+  closedChats: number,
+  openChats: number,
+  averageRating: number,
+  reviewCount: number
+}
+
 // Краткая информация о карточке
 export interface OrganizationCardData {
   id: number,
   name: string,
-  rate: number,
   description?: string,
   imgUrl?: string,
+  stats: IStats
 }
 
 export interface ReviewData{
   rating: number,
   chatId:number,
-  review: string
+  text: string
 }
 
 // Получить организации
@@ -73,5 +81,6 @@ export const generateOrganizationLink = async (orgId: number) => {
 
 // Оставить рейтинг об организации
 export const sendOrganizationReview = async (data: ReviewData) => {
+  console.log(data);
   return await axios.post(`/review`, data);
 }

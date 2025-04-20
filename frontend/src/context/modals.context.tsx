@@ -14,7 +14,7 @@ interface RateModalData{
 //возможные данные в модалках
 interface ModalData {
   //OrganizationModal
-  organizationModal?: {id: string}
+  organizationModal?: {id: number}
   rateModal?: RateModalData
 }
 

@@ -33,7 +33,7 @@ const AddReviewModal = () => {
             const reviewData: ReviewData = {
                 rating,
                 chatId,
-                review: review.trim()
+                text: review.trim()
             }
             await sendOrganizationReview(reviewData);
         }
