@@ -93,10 +93,14 @@ const Authorization = ({asVolunteer, createOrg}: { asVolunteer: boolean, createO
     try {
       const result = await fetchVerify({email, otp: code});
       if (result.status === 200 && result.data) {
-        setStep(STEPS.COMPLETE);
-        setCode(0);
         auth?.login(result.data.token);
         await auth?.updateProfile();
+        if(!auth?.user?.role) {
+          setStep(STEPS.COMPLETE);
+          setCode(0);
+        } else {
+          router.push("/messages");
+        }
       } else {
         setCode(0);
         toast.error("Неверный или истёкший код");
@@ -136,7 +140,6 @@ const Authorization = ({asVolunteer, createOrg}: { asVolunteer: boolean, createO
     const data: any = {};
     formData.forEach((value, key) => data[key] = value);
 
-    console.log(data);
     // Проверяем поля (делается на быструю руку, сорян, я знаю что нужно делать верификацию формы через zod и regexp)
     if (data.address === "" || data.birthDate === "" || data.fullname === "" || data.phone === "") return;
     if (asVolunteer && data.skills === "") return;

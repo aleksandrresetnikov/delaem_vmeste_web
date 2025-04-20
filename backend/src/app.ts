@@ -2,6 +2,7 @@
 import Elysia from 'elysia';
 import {swagger} from '@elysiajs/swagger';
 import {cors} from '@elysiajs/cors';
+import { staticPlugin } from '@elysiajs/static';
 import jwt from "@elysiajs/jwt";
 import 'dotenv/config';
 
@@ -75,6 +76,11 @@ async function bootstrap() {
           .use(CompanyRoute)
           .use(ReviewRoute)
   );
+
+  app.use(staticPlugin({
+    prefix: "/files",
+    assets: "files"
+  }));
 
   // Gодключаем WebRTP:
   WebRTCService.runRtcServer();
