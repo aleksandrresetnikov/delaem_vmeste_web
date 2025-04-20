@@ -1,8 +1,8 @@
 import axios, {InternalAxiosRequestConfig} from 'axios';
 
 const axiosInstance = axios.create({
-  // baseURL: 'http://api.tula.vyatkaowls.ru/api', // API URL
-  baseURL: 'http://localhost:8000/api', // API URL
+  baseURL: 'http://api.tula.vyatkaowls.ru/api', // API URL
+  // baseURL: 'http://localhost:8000/api', // API URL
   headers: {
     'Content-Type': 'application/json',
   },
