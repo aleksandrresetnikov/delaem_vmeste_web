@@ -65,12 +65,16 @@
     backdrop-filter: blur(5);
 }
 
-
-.infoBadge {
+.badgeContainer{
+    display: flex;
+    width: 100%;
+    align-items: start;
     position: absolute;
     bottom: 5px;
     left: 5px;
     z-index: 6;
+    gap: 5px;
+    flex-wrap: wrap;
 }
 
 .btnBlock {
