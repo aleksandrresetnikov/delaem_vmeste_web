@@ -36,11 +36,10 @@ companyRoutes.post("/", async (ctx) => {
 
     if (userData.role === "MEMBER") return ctx.set.status = 403;
 
-    return await CompanyService.createCompany(ctx.body.name, userData.id)
+    return await CompanyService.createCompany(ctx.body.name, ctx.body.description, userData.id);
   } catch (err) {
-    ctx.set.status = 500;
     console.error(err);
-    return err;
+    return ctx.set.status = 500;
   }
 }, {body: PostCompanyDto});
 

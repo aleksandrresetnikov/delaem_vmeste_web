@@ -1,8 +1,18 @@
 import {Elysia} from 'elysia';
 import {getUserData} from '../middleware/authorization.middleware';
-import {PostChatGptBody, PostMessageBodyDto} from '../dto/chat.dto';
+import {
+  ChatOrganizationPatchDto,
+  PostChatGptBody,
+  PostMessageBodyDto,
+  PostMessageFileBodyDto,
+  PostMessageFileParamsDto
+} from '../dto/chat.dto';
 import {ChatService} from '../service/chat.service';
 import {AuthService} from '../service/auth.service';
+import {ChatProvider} from "../providers/chat.provider.ts";
+import prisma from "../util/prisma.ts";
+import {CompanyProvider} from "../providers/company.provider.ts";
+import {write} from "bun";
 
 const authRoutes = new Elysia({prefix: "/chat", detail: {tags: ["Chat"]}});
 
@@ -42,6 +52,45 @@ authRoutes.get("/:chatId", async (ctx) => {
   }
 });
 
+// ендпойнт для выбора организации в чате
+authRoutes.patch("/:chatId/organization/:organizationId", async (ctx) => {
+  try {
+    // Получаем аккаунт по хидеру авторизации
+    const userData = await getUserData(ctx);
+    if (!userData) return ctx.set.status = 401;
+
+    if (!await AuthService.checkFullUserRules(userData.id)) return ctx.set.status = 401;
+
+    const {chatId, organizationId} = ctx.params;
+
+    const chatData = await ChatProvider.getById(chatId);
+    if (!chatData || chatData.companyId) return ctx.set.status = 403;
+
+    const organizationData = await CompanyProvider.getByID(organizationId);
+    if (!organizationData || !organizationData.members) return ctx.set.status = 404;
+
+    await prisma.chat.update({
+      where: {id: chatId}, data: {
+        company: {
+          connect: {
+            id: organizationId
+          }
+        }
+      }
+    })
+
+    for (let member of organizationData.members) {
+      if (!chatData.users.map(item => item.id).includes(member.id)) {
+        await ChatProvider.addUserToChat(member.id, chatId);
+      }
+    }
+  } catch (err) {
+    ctx.set.status = 500;
+    console.error(err);
+    return err;
+  }
+}, {params: ChatOrganizationPatchDto});
+
 authRoutes.get("/message/:chatId", async (ctx) => {
   try {
     const {chatId} = ctx.params;
@@ -73,7 +122,10 @@ authRoutes.post("/message/:chatId", async (ctx) => {
 
     const {chatId} = ctx.params;
 
-    if (ctx.body.content.toLowerCase() === "человек") {
+    // Отправлять можно только текст
+    if (!ctx.body.content.text) return;
+
+    if (ctx.body.content.text.toLowerCase() === "человек") {
       const result = await ChatService.searchOrganizationForUser(+ctx.params.chatId, userData.id);
       if (!result) return ctx.set.status = 500;
 
@@ -88,6 +140,37 @@ authRoutes.post("/message/:chatId", async (ctx) => {
   }
 }, {body: PostMessageBodyDto});
 
+authRoutes.post("/message/file/:chatId", async (ctx) => {
+  const file = ctx.body.file;
+  const {chatId} = ctx.params;
+
+  try {
+    // Получаем аккаунт по хидеру авторизации
+    const userData = await getUserData(ctx);
+    if (!userData) return ctx.set.status = 401;
+
+    if (!file) {
+      throw new Error('No file uploaded');
+    }
+
+    const fileName = `${Date.now()}_${file.name}`;
+    const filePath = `./files/${fileName}`;
+
+    await write(filePath, file);
+
+    // Добавляем сообщение с файлом в чат
+    await ChatService.sendMessage(userData.id, chatId, "DEFAULT", {
+      link: `http://localhost:8000/files/${fileName}`
+    })
+
+    return ctx.set.status = 201;
+  } catch(e){
+    ctx.set.status = 500;
+    console.error(e);
+    return e;
+  }
+}, {body: PostMessageFileBodyDto, params: PostMessageFileParamsDto});
+
 authRoutes.post("/", async (ctx) => {
   try {
     // Получаем аккаунт по хидеру авторизации
@@ -96,10 +179,13 @@ authRoutes.post("/", async (ctx) => {
 
     if (!await AuthService.checkFullUserRules(userData.id)) return ctx.set.status = 401;
 
-    const result = await ChatService.createChatWithPrompt(userData.id, ctx.body.prompt);
-    if (!result) return ctx.set.status = 500;
+    // Создаём чат
+    const chatData = await ChatProvider.create([userData.id]);
+    if (!chatData) return false;
 
-    return ctx.set.status = 201;
+    ChatService.createChatWithPrompt(userData.id, chatData.id, ctx.body.prompt);
+
+    return chatData;
   } catch (err) {
     ctx.set.status = 500;
     console.error(err);

@@ -1,7 +1,8 @@
 export const STEPS = {
   EMAIL: 1,
   CODE: 2,
-  COMPLETE: 3
+  COMPLETE: 3,
+  ORGANIZATION: 4
 } as const;
 
 export const TIMER_INITIAL_VALUE = 60;
@@ -9,7 +10,8 @@ export const TIMER_INITIAL_VALUE = 60;
 export const TITLES = [
   "Будем знакомы",
   "Добро пожаловать",
-  "Последний шаг"
+  "Последний шаг",
+  "Организация"
 ] as const;
 
 export const CATEGORIES = [

@@ -1,11 +1,15 @@
+"use client";
 import s from './MainSection.module.css'
 import React from 'react';
 import {Button} from "@/components/ui/button";
 import {cn} from "@/lib/utils";
 import Image from 'next/image'
 import ActionButton from "@/components/shared/ActionButton/ActionButton";
+import { useRouter } from 'next/navigation';
 
 const MainSection = () => {
+  const router = useRouter();
+
   return (
       <div className={s.wrapper}>
         {/*Контенер заголвока*/}
@@ -19,11 +23,11 @@ const MainSection = () => {
 
         {/*Контейнер кнопок*/}
         <div className={cn(s.container, s.btnContainer)}>
-          <ActionButton
+          <ActionButton onClick={() => router.push("/auth")}
               action={'Получить помощь'}
           />
 
-          <Button variant='secondary' size='xl'>
+          <Button variant='secondary' size='xl' onClick={() => router.push("/auth?asVolunteer=true")}>
             <h4>Я волонтер</h4>
           </Button>
         </div>

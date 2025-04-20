@@ -4,13 +4,18 @@ import {OrganizationCardData} from "@/api/organizations";
 
 export type ModalsList =
     "none"
-    | "organization";
+    | "organization"
+    | "rate";
+
+interface RateModalData{
+  chatId: number
+}
 
 //возможные данные в модалках
 interface ModalData {
   //OrganizationModal
-  organizationModal?: OrganizationCardData
-
+  organizationModal?: {id: number}
+  rateModal?: RateModalData
 }
 
 interface ModalsProviderType {

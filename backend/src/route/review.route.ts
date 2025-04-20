@@ -40,7 +40,7 @@ reviewRoutes.post("/", async (ctx) => {
     const userData = await getUserData(ctx);
     if (!userData) return ctx.set.status = 401;
 
-    const result = ReviewService.createReview(
+    const result = await ReviewService.createReview(
         ctx.body.rating,
         userData.id,
         ctx.body.chatId,

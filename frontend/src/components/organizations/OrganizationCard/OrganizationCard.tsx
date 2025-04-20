@@ -5,25 +5,34 @@ import {OrganizationCardData} from "@/api/organizations";
 import useModal from "@/hooks/useModal";
 import InfoBadge from "@/components/organizations/InfoBadge/InfoBadge";
 import {Button} from "@/components/ui/button";
+import {checkRate, correctWordForm} from "@/helpers/organiztion.helpers";
 
-const OrganizationCard: FC<OrganizationCardData> = ({id, imageUrl, title, description}) => {
+const OrganizationCard: FC<OrganizationCardData> = ({id, name,stats, imgUrl, description}) => {
   const modal = useModal()
   if (!modal) return
 
   const handleOpenModal = () => {
-    const organizationModal: OrganizationCardData = {id, imageUrl, title, description}
-    modal.switchModal('organization', {organizationModal})
+    modal.switchModal('organization', {organizationModal: {id}})
   }
 
   return (
       <div className={s.card} title="Подробнее" onClick={handleOpenModal}>
         <div className={s.imageBlock}>
-          <img className={s.image} width={200} height={200} alt={title} src={imageUrl || '/icons/heart.png'}/>
-          <InfoBadge className={s.infoBadge} type='likes' count={12}/>
+          <img className={s.image} width={200} height={200} alt={name} src={imgUrl || '/icons/heart.png'}/>
+            <div className={s.badgeContainer}>
+                {
+                    stats.closedChats > 0 &&
+                    <InfoBadge className={s.infoBadge} type='likes' count={stats.closedChats} text={correctWordForm(stats.closedChats)}/>
+                }
+                {
+                    stats.averageRating > 0 &&
+                    <InfoBadge className={s.infoBadge} type='rate' count={stats.averageRating} text={checkRate(stats.averageRating)}/>
+                }
+            </div>
         </div>
 
         <div className={s.text}>
-          <h3>{title}</h3>
+          <h3>{name}</h3>
           <p className={s.description}>{description}</p>
         </div>
 

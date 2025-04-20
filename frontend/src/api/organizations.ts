@@ -4,18 +4,19 @@ import {AxiosResponse} from "axios";
 // Интерфейсы данных
 export interface CreateOrganizationData {
   name: string;
+  description: string;
 }
 
 // Комментарий
 export interface IComment {
-  id: string,
+  id: number,
   author: string,
   text: string
 }
 
 // Вся информация о карточке
 export interface OrganizationData {
-  id: string,
+  id: number,
   name: string,
   description?: string,
   imageUrl?: string,
@@ -25,12 +26,27 @@ export interface OrganizationData {
   reviews: IComment[]
 }
 
+export interface IStats{
+  totalChats: number,
+  closedChats: number,
+  openChats: number,
+  averageRating: number,
+  reviewCount: number
+}
+
 // Краткая информация о карточке
 export interface OrganizationCardData {
-  id: string,
-  title: string,
+  id: number,
+  name: string,
   description?: string,
-  imageUrl?: string,
+  imgUrl?: string,
+  stats: IStats
+}
+
+export interface ReviewData{
+  rating: number,
+  chatId:number,
+  text: string
 }
 
 // Получить организации
@@ -59,6 +75,12 @@ export const removeOrganizationMember = async (userId: string) => {
 }
 
 // Сгенерировать ссылку на организацию
-export const generateOrganizationLink = async (OrganizationId: string) => {
-  return await axios.post(`/company/link/${OrganizationId}`);
+export const generateOrganizationLink = async (orgId: number) => {
+  return await axios.post(`/company/link/${orgId}`);
+}
+
+// Оставить рейтинг об организации
+export const sendOrganizationReview = async (data: ReviewData) => {
+  console.log(data);
+  return await axios.post(`/review`, data);
 }

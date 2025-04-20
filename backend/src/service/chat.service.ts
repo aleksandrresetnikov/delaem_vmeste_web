@@ -53,17 +53,22 @@ export class ChatService {
   static closeChat = async (userId: number, chatId: number) => {
     if (!await ChatProvider.hasUserInChat(chatId, userId)) return false;
 
-    if (await ChatProvider.isChatClosed(chatId)) return false;
+    const closeData = await ChatProvider.isChatClosed(chatId);
+    if (closeData && closeData.isClosed) return false;
+
+    await ChatProvider.addMessage(userId, chatId, "STATUS", {
+      text: "Чат закрыт"
+    })
 
     return await ChatProvider.closeChat(chatId);
   }
 
   /**
    * Создать чат с промптом
-   * @param userId - ID юзера
+   * @param chatId - ID чата
    * @param prompt - промпт текст
    */
-  static createChatWithPrompt = async (userId: number, prompt: string) => {
+  static createChatWithPrompt = async (userId: number, chatId: number, prompt: string) => {
     const user = await UserProvider.getByID(userId);
     if (!user) return false;
 
@@ -73,28 +78,25 @@ export class ChatService {
       gpt.setUserPrompt(prompt);
       gpt.setTemperature(0.3);
 
-      const chatData = await ChatProvider.create([userId]);
-      if (!chatData) return false;
-
       // Отправляем сообщения статусов
-      await ChatService.sendMessage(userId, chatData.id, MessageType.STATUS, {
+      await ChatService.sendMessage(userId, chatId, MessageType.STATUS, {
         text: "Чат создан"
       });
 
       // Отправляем сообщение юзера
-      await ChatService.sendMessage(userId, chatData.id, MessageType.DEFAULT, {
+      await ChatService.sendMessage(userId, chatId, MessageType.DEFAULT, {
         text: prompt
       });
 
       // Отправляем даные
-      await ChatService.sendMessage(userId, chatData.id, MessageType.STATUS_LOADING, {
+      await ChatService.sendMessage(userId, chatId, MessageType.STATUS_LOADING, {
         text: "ИИ уже пытается найти решение вашей проблемы"
       });
 
       const response = await gpt.ask();
       if (!response || response.choices.length < 1 || !response.choices[0]) return false;
 
-      await ChatService.sendMessage(userId, chatData.id, MessageType.DEFAULT, {
+      await ChatService.sendMessage(userId, chatId, MessageType.DEFAULT, {
         text: response.choices[0].message.content,
         ai: true
       });
