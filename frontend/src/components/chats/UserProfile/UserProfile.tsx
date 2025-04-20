@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import styles from "./UserProfile.module.css";
-import {PhoneCall, Video, Building2, User as UserIcon, MapPin, Mail, Cake} from "lucide-react";
 import useChat from "@/hooks/useChat";
 import {UIChatData} from "@/context/chat.context";
 import useModal from "@/hooks/useModal";
@@ -9,6 +8,22 @@ import useAuth from "@/hooks/useAuth";
 import { closeChat } from '@/api/chats';
 import {toast} from "sonner";
 import {Dialog, DialogContent, DialogHeader, DialogTitle} from "@/components/ui/dialog";
+import {
+  PhoneCall, 
+  Video, 
+  Building2, 
+  User as UserIcon, 
+  MapPin, 
+  Mail, 
+  Cake,
+  Briefcase,
+  Link,
+  Shield,
+  Calendar,
+  MessageSquare,
+  Star
+} from "lucide-react";
+import Image from 'next/image'; // Добавлен импорт Image
 
 type ProfileData = UIChatData & {
   role?: string;
@@ -16,12 +31,17 @@ type ProfileData = UIChatData & {
     name: string;
     description?: string;
     imgUrl?: string;
+    links?: Array<{id: number, link: string}>; // Добавлен тип для links
   };
   address?: string;
   phone?: string;
   email?: string;
   birthDate?: string;
   skills?: string;
+  fullname?: string;
+  username?: string;
+  categories?: string[]; // Добавлен тип для categories
+  createdAt?: string | Date; // Добавлен тип для createdAt
 };
 
 const UserProfile = () => {
@@ -43,7 +63,11 @@ const UserProfile = () => {
           phone: profileInfo.phone,
           email: profileInfo.email,
           birthDate: profileInfo.birthDate,
-          skills: profileInfo.skills
+          skills: profileInfo.skills,
+          fullname: profileInfo.fullname,
+          username: profileInfo.username,
+          categories: profileInfo.categories,
+          createdAt: profileInfo.createdAt
         });
       }
     }
@@ -85,56 +109,161 @@ const UserProfile = () => {
 
   const renderUserInfo = () => {
     if (data.role === 'ADMIN' || data.company) {
-      // Рендерим информацию о компании/организации
+      // Данные организации/компании
       return (
-        <>
+        <div className="space-y-3">
+          {/* Основная информация */}
           <div className="flex items-center gap-2">
             <Building2 className="h-5 w-5 text-muted-foreground" />
-            <span>{data.company?.name}</span>
+            <span className="font-medium">Название: {data.company?.name}</span>
           </div>
+
           {data.company?.description && (
-            <div className="text-sm text-muted-foreground">
-              {data.company.description}
+            <div className="flex items-start gap-2">
+              <MessageSquare className="h-5 w-5 text-muted-foreground mt-0.5" />
+              <span>Описание: {data.company.description}</span>
             </div>
           )}
-        </>
+
+          {data.company?.imgUrl && (
+            <div className="flex items-center gap-2">
+              <Image 
+                src={data.company.imgUrl} 
+                alt="Company logo" 
+                width={20} 
+                height={20} 
+                className="h-5 w-5 text-muted-foreground"
+              />
+              <span>Логотип компании</span>
+            </div>
+          )}
+
+          {/* Контактные данные */}
+          <div className="pt-2 border-t">
+            <h4 className="font-medium mb-2">Контактные данные:</h4>
+            
+            {data.email && (
+              <div className="flex items-center gap-2">
+                <Mail className="h-5 w-5 text-muted-foreground" />
+                <span>Email: {data.email}</span>
+              </div>
+            )}
+
+            {data.phone && (
+              <div className="flex items-center gap-2">
+                <PhoneCall className="h-5 w-5 text-muted-foreground" />
+                <span>Телефон: {data.phone}</span>
+              </div>
+            )}
+
+            {data.address && (
+              <div className="flex items-center gap-2">
+                <MapPin className="h-5 w-5 text-muted-foreground" />
+                <span>Адрес: {data.address}</span>
+              </div>
+            )}
+          </div>
+
+          {/* Ссылки компании */}
+          {data.company?.links && data.company.links.length > 0 && (
+            <div className="pt-2 border-t">
+              <h4 className="font-medium mb-2">Ссылки:</h4>
+              {data.company.links.map(link => (
+                <div key={link.id} className="flex items-center gap-2">
+                  <Link className="h-5 w-5 text-muted-foreground" />
+                  <a href={link.link} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
+                    {link.link}
+                  </a>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       );
     }
 
-    // Рендерим информацию о обычном пользователе
+    // Данные обычного пользователя
     return (
-      <>
-        {data.address && (
-          <div className="flex items-center gap-2">
-            <MapPin className="h-5 w-5 text-muted-foreground" />
-            <span>{data.address}</span>
-          </div>
-        )}
-        {data.phone && (
-          <div className="flex items-center gap-2">
-            <PhoneCall className="h-5 w-5 text-muted-foreground" />
-            <span>{data.phone}</span>
-          </div>
-        )}
-        {data.email && (
-          <div className="flex items-center gap-2">
-            <Mail className="h-5 w-5 text-muted-foreground" />
-            <span>{data.email}</span>
-          </div>
-        )}
-        {data.birthDate && (
-          <div className="flex items-center gap-2">
-            <Cake className="h-5 w-5 text-muted-foreground" />
-            <span>{new Date(data.birthDate).toLocaleDateString()}</span>
-          </div>
-        )}
-        {data.skills && (
+      <div className="space-y-3">
+        {/* Основная информация */}
+        <div className="flex items-center gap-2">
+          <UserIcon className="h-5 w-5 text-muted-foreground" />
+          <span className="font-medium">Имя: {data.fullname || data.name}</span>
+        </div>
+
+        {data.username && (
           <div className="flex items-center gap-2">
             <UserIcon className="h-5 w-5 text-muted-foreground" />
-            <span>Навыки: {data.skills}</span>
+            <span>Логин: {data.username}</span>
           </div>
         )}
-      </>
+
+        {data.role && (
+          <div className="flex items-center gap-2">
+            <Shield className="h-5 w-5 text-muted-foreground" />
+            <span>Роль: {data.role}</span>
+          </div>
+        )}
+
+        {/* Контактные данные */}
+        <div className="pt-2 border-t">
+          <h4 className="font-medium mb-2">Контактные данные:</h4>
+          
+          {data.email && (
+            <div className="flex items-center gap-2">
+              <Mail className="h-5 w-5 text-muted-foreground" />
+              <span>Email: {data.email}</span>
+            </div>
+          )}
+
+          {data.phone && (
+            <div className="flex items-center gap-2">
+              <PhoneCall className="h-5 w-5 text-muted-foreground" />
+              <span>Телефон: {data.phone}</span>
+            </div>
+          )}
+
+          {data.address && (
+            <div className="flex items-center gap-2">
+              <MapPin className="h-5 w-5 text-muted-foreground" />
+              <span>Адрес: {data.address}</span>
+            </div>
+          )}
+        </div>
+
+        {/* Дополнительная информация */}
+        <div className="pt-2 border-t">
+          <h4 className="font-medium mb-2">Дополнительно:</h4>
+          
+          {data.birthDate && (
+            <div className="flex items-center gap-2">
+              <Cake className="h-5 w-5 text-muted-foreground" />
+              <span>Дата рождения: {new Date(data.birthDate).toLocaleDateString()}</span>
+            </div>
+          )}
+
+          {data.skills && (
+            <div className="flex items-center gap-2">
+              <Briefcase className="h-5 w-5 text-muted-foreground" />
+              <span>Навыки: {data.skills}</span>
+            </div>
+          )}
+
+          {data.categories && data.categories.length > 0 && (
+            <div className="flex items-center gap-2">
+              <Star className="h-5 w-5 text-muted-foreground" />
+              <span>Категории: {data.categories.join(', ')}</span>
+            </div>
+          )}
+
+          {data.createdAt && (
+            <div className="flex items-center gap-2">
+              <Calendar className="h-5 w-5 text-muted-foreground" />
+              <span>Дата регистрации: {new Date(data.createdAt).toLocaleDateString()}</span>
+            </div>
+          )}
+        </div>
+      </div>
     );
   };
 
@@ -166,18 +295,10 @@ const UserProfile = () => {
             </DialogTitle>
           </DialogHeader>
           <div className="flex flex-col items-center gap-4 py-4">
-          
+            <img alt={data.name} src={data.image} className="w-24 h-24 rounded-full"/>
             <h3 className="text-xl font-semibold">{data.name}</h3>
-            <img alt={data.name} src={data.image} className={styles.avatar}/>
             <div className="w-full space-y-3">
               {renderUserInfo()}
-              
-              <div className="pt-2 border-t">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Последнее сообщение:</span>
-                  <span>{data.lastMessage}</span>
-                </div>
-              </div>
             </div>
             
             <div className="flex gap-2 mt-4">
