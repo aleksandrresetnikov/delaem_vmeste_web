@@ -1,5 +1,5 @@
 "use client";
-import React, {createContext, ReactNode, useCallback, useMemo, useState} from 'react';
+import React, {createContext, ReactNode, useCallback, useMemo} from 'react';
 import {
   createChat,
   CreateChatData,
@@ -75,11 +75,10 @@ export const ChatProvider = ({children}: ChatProviderProps) => {
   } = useQuery<ChatInListProps[]>({
     queryKey: ['chats'],
     queryFn: async () => {
-      const response = await fetchChats();
-      return response;
+      return await fetchChats();
     },
-    refetchInterval: 6000,
-    staleTime: 5000
+    refetchInterval: 2000,
+    staleTime: 1000
   });
 
   // Запрос для информации о текущем чате
@@ -95,7 +94,7 @@ export const ChatProvider = ({children}: ChatProviderProps) => {
       return response.data; // Предполагаем, что response.data содержит IChatInfo
     },
     enabled: selectedChat > 0,
-    refetchInterval: selectedChat > 0 ? 30000 : false
+    refetchInterval: selectedChat > 0 ? 5000 : false
   });
 
   // Запрос для сообщений текущего чата

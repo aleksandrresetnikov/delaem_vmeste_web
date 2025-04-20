@@ -24,7 +24,8 @@ const ChatWindow = () => {
       return (
           <Bubble
               time={item.createdOn.toString()}
-              byMe={item.userId === auth.user.id && !item.content.ai}>
+              byMe={item.userId === auth.user.id && !item.content.ai}
+              byAi={item.content.ai || false}>
             {item.content.text}
           </Bubble>
       )
@@ -54,20 +55,6 @@ const ChatWindow = () => {
               </div>)
           }
 
-          {/* Нет выбранного чата */}
-          {
-            // chat?.selectedChat === -1 && chat?.isChats && <div className={styles.hint}>
-            //     <h4>Выберите, с кем хотите связаться</h4>
-            // </div>
-          }
-
-          {/* Выбранный чат закрыт */}
-          {
-            // chat?.currentChat?.isClosed && <div className={styles.hint}>
-            //     <h4>Выберите, с кем хотите связаться</h4>
-            // </div>
-          }
-
           {/* Профиль организации/юзера */}
           {
               chat?.currentChat &&
@@ -88,22 +75,6 @@ const ChatWindow = () => {
               chat?.messages[chat?.messages.length - 1].type === "SELECT_ORGANIZATION" &&
               <OfferedOrganizationList/>
           }
-
-          {/*  <Bubble*/}
-          {/*      time={new Date().toString()}*/}
-          {/*      byMe={true}>*/}
-          {/*    {'item.content.text'}*/}
-          {/*  </Bubble>*/}
-          {/*  <Bubble*/}
-          {/*      time={new Date().toString()}*/}
-          {/*      byMe={false}>*/}
-          {/*    {'item.content.text'}*/}
-          {/*  </Bubble><Bubble*/}
-          {/*    time={new Date().toString()}*/}
-          {/*    byMe={true}>*/}
-          {/*  {'item.content.text'}*/}
-          {/*</Bubble>*/}
-
         </div>
       </div>
   );
