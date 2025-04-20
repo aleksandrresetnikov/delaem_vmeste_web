@@ -13,63 +13,12 @@ const CardList = ({data}: { data: OrganizationCardData[] }) => {
                     key={card.id}
                     id={card.id}
                     rate={card.rate}
-                    imageUrl={card.imageUrl}
-                    title={card.title}
+                    imageUrl={card.imgUrl}
+                    title={card.name}
                     description={card.description}
                 />
             )
           }
-
-          <OrganizationCard
-              key={"a"}
-              id={"b"}
-              imageUrl={"v"}
-              title={"title"}
-              description={"desc"}
-          />
-          <OrganizationCard
-              key={"a"}
-              id={"b"}
-              imageUrl={"v"}
-              title={"title"}
-              description={"desc"}
-          />
-          <OrganizationCard
-              key={"a"}
-              id={"b"}
-              imageUrl={"v"}
-              title={"title"}
-              description={"desc"}
-          />
-          <OrganizationCard
-              key={"a"}
-              id={"b"}
-              imageUrl={"v"}
-              title={"title"}
-              description={"desc"}
-          />
-          <OrganizationCard
-              key={"a"}
-              id={"b"}
-              imageUrl={"v"}
-              title={"title"}
-              description={"desc"}
-          />
-          <OrganizationCard
-              key={"a"}
-              id={"b"}
-              imageUrl={"v"}
-              title={"title"}
-              description={"desc"}
-          />
-
-          <OrganizationCard
-              key={"a"}
-              id={"b"}
-              imageUrl={"v"}
-              title={"title"}
-              description={"desc"}
-          />
         </div>
       </div>
   )

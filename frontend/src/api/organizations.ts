@@ -9,14 +9,14 @@ export interface CreateOrganizationData {
 
 // Комментарий
 export interface IComment {
-  id: string,
+  id: number,
   author: string,
   text: string
 }
 
 // Вся информация о карточке
 export interface OrganizationData {
-  id: string,
+  id: number,
   name: string,
   description?: string,
   imageUrl?: string,
@@ -28,11 +28,11 @@ export interface OrganizationData {
 
 // Краткая информация о карточке
 export interface OrganizationCardData {
-  id: string,
-  title: string,
+  id: number,
+  name: string,
   rate: number,
   description?: string,
-  imageUrl?: string,
+  imgUrl?: string,
 }
 
 // Получить организации

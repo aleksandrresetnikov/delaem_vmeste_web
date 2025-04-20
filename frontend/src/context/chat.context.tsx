@@ -140,6 +140,8 @@ export const ChatProvider = ({children}: ChatProviderProps) => {
   }
 
   const parseChat = (data: ChatInListProps) => {
+    console.log(data);
+
     const username = data.chat.companyId === null ? "Новый чат" : data.chat.company?.name || "Неизвестный чат";
     const msg = data.chat.messages[0]?.content?.text || "";
 

@@ -9,6 +9,9 @@ import InfoBadge from "@/components/organizations/InfoBadge/InfoBadge";
 import ReviewsList from "@/widgets/ReviewsList/ReviewsList";
 import {Button} from "@/components/ui/button";
 import {useAsync} from "react-use";
+import useChat from "@/hooks/useChat";
+import { toast } from 'sonner';
+import {selectChatOrganization} from "@/api/chats";
 
 //функции помогаторы
 export const correctWordForm = (count: number): string => {
@@ -33,6 +36,18 @@ const checkRate = (rate: number): string => {
 
 
 const ShowContent = (data: OrganizationData) => {
+  const chat = useChat();
+  const setOrganizationChat = async () => {
+    const chatId = chat?.currentChat?.id;
+    if(!chatId) return;
+
+    try {
+      await selectChatOrganization(chatId, data.id);
+    } catch(e){
+      console.error(e);
+      toast.error('Не удалось выбрать организацию');
+    }
+  }
 
   return (
       <>
@@ -64,7 +79,7 @@ const ShowContent = (data: OrganizationData) => {
             />
 
           </div>
-          <Button className={s.call}>Связаться</Button>
+          <Button className={s.call} onClick={setOrganizationChat}>Связаться</Button>
 
           <div className={s.reviewSection}>
             <div className={s.reviewHeader}>

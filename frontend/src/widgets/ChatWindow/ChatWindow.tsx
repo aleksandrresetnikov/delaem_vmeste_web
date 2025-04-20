@@ -1,5 +1,5 @@
 "use client";
-import React, {useEffect, useRef} from 'react';
+import React, {useRef} from 'react';
 import styles from "./ChatWindow.module.css";
 import Bubble from "@/components/chats/Bubble/Bubble";
 import Status from "@/components/chats/Status/Status";
@@ -9,6 +9,7 @@ import {IMessage} from '@/api/chats';
 import useAuth from "@/hooks/useAuth";
 import LoadingWrapper from "@/components/chats/LoadingWrapper/LoadingWrapper";
 import {useInterval} from "react-use";
+import OfferedOrganizationList from "@/widgets/OfferedOrganizationList/OfferedOrganizationList";
 
 const ChatWindow = () => {
   const chat = useChat();
@@ -42,63 +43,68 @@ const ChatWindow = () => {
 
   return (
       <div className={styles.scroll} ref={$window}>
-      <div className={styles.wrapper} ref={$w2}>
+        <div className={styles.wrapper} ref={$w2}>
 
-        {/* Нет чатов вообще */}
-        {
-            !chat?.isChats || chat?.selectedChat === -1 &&
-            (<div className={styles.hint}>
-              <h4>Опишите проблему</h4>
-              <p>Мы подберем подходящее решение для Вас</p>
-            </div>)
-        }
+          {/* Нет чатов вообще */}
+          {
+              !chat?.isChats || chat?.selectedChat === -1 &&
+              (<div className={styles.hint}>
+                <h4>Опишите проблему</h4>
+                <p>Мы подберем подходящее решение для Вас</p>
+              </div>)
+          }
 
-        {/* Нет выбранного чата */}
-        {
-          // chat?.selectedChat === -1 && chat?.isChats && <div className={styles.hint}>
-          //     <h4>Выберите, с кем хотите связаться</h4>
-          // </div>
-        }
+          {/* Нет выбранного чата */}
+          {
+            // chat?.selectedChat === -1 && chat?.isChats && <div className={styles.hint}>
+            //     <h4>Выберите, с кем хотите связаться</h4>
+            // </div>
+          }
 
-        {/* Выбранный чат закрыт */}
-        {
-          // chat?.currentChat?.isClosed && <div className={styles.hint}>
-          //     <h4>Выберите, с кем хотите связаться</h4>
-          // </div>
-        }
+          {/* Выбранный чат закрыт */}
+          {
+            // chat?.currentChat?.isClosed && <div className={styles.hint}>
+            //     <h4>Выберите, с кем хотите связаться</h4>
+            // </div>
+          }
 
-        {/* Профиль организации/юзера */}
-        {
-            chat?.currentChat &&
-            <div className={styles.profile}><UserProfile/></div>
-        }
+          {/* Профиль организации/юзера */}
+          {
+              chat?.currentChat &&
+              <div className={styles.profile}><UserProfile/></div>
+          }
 
-        {
-            chat?.chatLoading && <LoadingWrapper/>
-        }
+          {
+              chat?.chatLoading && <LoadingWrapper/>
+          }
 
-        {
-            chat?.messages && chat?.messages.map(item => renderMessage(item))
-        }
+          {
+              chat?.messages && chat?.messages.map(item => renderMessage(item))
+          }
 
-        {/*  <OfferedOrganizationList/>*/}
+          {
+              !chat?.currentChat?.company?.id &&
+              chat?.messages[chat?.messages.length - 1] &&
+              chat?.messages[chat?.messages.length - 1].type === "SELECT_ORGANIZATION" &&
+              <OfferedOrganizationList/>
+          }
 
-        {/*  <Bubble*/}
-        {/*      time={new Date().toString()}*/}
-        {/*      byMe={true}>*/}
-        {/*    {'item.content.text'}*/}
-        {/*  </Bubble>*/}
-        {/*  <Bubble*/}
-        {/*      time={new Date().toString()}*/}
-        {/*      byMe={false}>*/}
-        {/*    {'item.content.text'}*/}
-        {/*  </Bubble><Bubble*/}
-        {/*    time={new Date().toString()}*/}
-        {/*    byMe={true}>*/}
-        {/*  {'item.content.text'}*/}
-        {/*</Bubble>*/}
+          {/*  <Bubble*/}
+          {/*      time={new Date().toString()}*/}
+          {/*      byMe={true}>*/}
+          {/*    {'item.content.text'}*/}
+          {/*  </Bubble>*/}
+          {/*  <Bubble*/}
+          {/*      time={new Date().toString()}*/}
+          {/*      byMe={false}>*/}
+          {/*    {'item.content.text'}*/}
+          {/*  </Bubble><Bubble*/}
+          {/*    time={new Date().toString()}*/}
+          {/*    byMe={true}>*/}
+          {/*  {'item.content.text'}*/}
+          {/*</Bubble>*/}
 
-      </div>
+        </div>
       </div>
   );
 };
