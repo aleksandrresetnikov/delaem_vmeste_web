@@ -10,10 +10,13 @@ import useAuth from "@/hooks/useAuth";
 import LoadingWrapper from "@/components/chats/LoadingWrapper/LoadingWrapper";
 import {useInterval} from "react-use";
 import OfferedOrganizationList from "@/widgets/OfferedOrganizationList/OfferedOrganizationList";
+import {Button} from "@/components/ui/button";
+import {useRouter} from "next/navigation";
 
 const ChatWindow = () => {
   const chat = useChat();
   const auth = useAuth();
+  const router = useRouter();
   const $window = useRef(null);
   const $w2 = useRef(null);
 
@@ -21,14 +24,25 @@ const ChatWindow = () => {
     if (!auth?.user?.id) return;
 
     if (item.type === "DEFAULT") {
-      return (
-          <Bubble
-              time={item.createdOn.toString()}
-              byMe={item.userId === auth.user.id && !item.content.ai}
-              byAi={item.content.ai || false}>
-            {item.content.text}
-          </Bubble>
-      )
+      if(item.content.text){
+        return (
+            <Bubble
+                time={item.createdOn.toString()}
+                byMe={item.userId === auth.user.id && !item.content.ai}
+                byAi={item.content.ai || false}>
+              {item.content.text}
+            </Bubble>
+        )
+      } else if(item.content.link){
+        return (
+            <Bubble
+                time={item.createdOn.toString()}
+                byMe={item.userId === auth.user.id && !item.content.ai}
+                byAi={item.content.ai || false}>
+              <Button variant={"link"} onClick={() => router.push(item.content.link)}>Отправлен файл</Button>
+            </Bubble>
+        )
+      }
     }
     return (<Status loader={item.type === "STATUS_LOADING"}>{item.content.text}</Status>)
   }
