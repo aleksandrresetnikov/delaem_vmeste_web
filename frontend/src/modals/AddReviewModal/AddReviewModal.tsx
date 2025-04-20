@@ -1,10 +1,8 @@
 'use client'
-import s from './AddRateModal.module.css'
+import s from './AddReviewModal.module.css'
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
@@ -13,14 +11,17 @@ import {Slider} from "@/components/ui/slider";
 import {useState} from "react";
 import {Button} from "@/components/ui/button";
 import useChat from "@/hooks/useChat";
-import {sendOrganizationRate} from "@/api/organizations";
+import {ReviewData, sendOrganizationReview} from "@/api/organizations";
+import {Input} from "@/components/ui/input";
 
-const AddRateModal = () => {
+const AddReviewModal = () => {
     const modal = useModal()
     const chat = useChat()
     const isOpen = modal?.isOpen('rate')
 
-    const [rate, setRate] = useState(5)
+    const [rating, setRating] = useState(5)
+    const [review, setReview] = useState('')
+
 
     const onClose = (state: boolean) => {
         modal?.onClose(state)
@@ -28,8 +29,16 @@ const AddRateModal = () => {
 
     const handleSubmitRate = async () => {
         const chatId = chat?.currentChat?.id;
-        if (chatId) await sendOrganizationRate(rate, chatId);
-        await chat?.invalidateData();
+        if (chatId){
+            const reviewData: ReviewData = {
+                rating,
+                chatId,
+                text: review.trim()
+            }
+            await sendOrganizationReview(reviewData);
+        }
+        setReview('')
+        chat?.invalidateData();
         modal?.closeAll()
     }
 
@@ -43,19 +52,22 @@ const AddRateModal = () => {
                 </DialogHeader>
                 <div className={s.wrapper}>
                     <div className={s.contentWrapper}>
-                        <h2>{rate.toFixed(1)}</h2>
+                        <h2>{rating.toFixed(1)}</h2>
                         <Slider
                             defaultValue={[5]}
                             max={5}
+                            min={1}
                             step={0.2}
-                            onValueChange={(value) => setRate(value[0])}
+                            onValueChange={(value) => setRating(value[0])}
                         />
                     </div>
+
+                    <Input placeholder={'Здесь вы можете написать приятные слова'}
+                           value={review} onChange={(e) => setReview(e.target.value)}/>
                 </div>
                 <Button onClick={handleSubmitRate}>Отправить</Button>
             </DialogContent>
         </Dialog>
     )
 }
-
-export default AddRateModal
+export default AddReviewModal

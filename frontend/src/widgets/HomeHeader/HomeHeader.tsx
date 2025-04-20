@@ -20,11 +20,14 @@ import {
 import {Input} from "@/components/ui/input";
 import {User} from "../../../../backend/generated/prisma";
 import {toast} from "sonner";
+import {usePathname} from "next/navigation";
+import {cn} from "@/lib/utils";
 
 const HomeHeader = () => {
   const [open, setOpen] = useState(false);
   const auth = useAuth();
-
+  const pathname = usePathname()
+  console.log(pathname);
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text)
   };
@@ -98,7 +101,10 @@ const HomeHeader = () => {
         <div className="hidden md:flex items-center gap-4">
           <nav className={styles.nav}>
             {HomeHeaderData.map(item => (
-                <Link key={item.title} href={item.url}>{item.title}</Link>
+                <Link key={item.title} href={item.url}
+                      className={cn(pathname === item.url && styles.active) }>
+                  {item.title}
+                </Link>
             ))}
           </nav>
 

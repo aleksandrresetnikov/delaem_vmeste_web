@@ -26,6 +26,7 @@ export interface IMessage {
   content: {
     text?: string,
     ai?: boolean,
+    link?: string
   }
   type: MessageType,
   chatId: number,

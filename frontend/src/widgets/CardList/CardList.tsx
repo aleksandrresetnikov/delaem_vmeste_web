@@ -12,10 +12,10 @@ const CardList = ({data}: { data: OrganizationCardData[] }) => {
                 <OrganizationCard
                     key={card.id}
                     id={card.id}
-                    rate={card.rate}
-                    imageUrl={card.imgUrl}
-                    title={card.name}
+                    imgUrl={card.imgUrl}
                     description={card.description}
+                    name={card.name}
+                    stats={card.stats}
                 />
             )
           }

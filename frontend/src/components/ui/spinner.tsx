@@ -8,7 +8,7 @@ export const LoadingSpinner = ({className, size = 64}: { className?: string, siz
           height={size}
           viewBox="0 0 24 24"
           fill="none"
-          stroke="currentColor"
+          stroke="#2167fe"
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"

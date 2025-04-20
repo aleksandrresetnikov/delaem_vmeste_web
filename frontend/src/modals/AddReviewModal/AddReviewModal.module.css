@@ -2,6 +2,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
 }
 .contentWrapper{
     width: 50%;
@@ -11,6 +12,11 @@
     flex-direction: column;
     gap: 20px;
     padding: 10px;
+}
+
+.wrapper input{
+    max-width: 70%;
+    min-height: 100px;
 }
 
 .contentWrapper h2{

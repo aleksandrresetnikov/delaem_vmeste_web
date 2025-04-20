@@ -54,26 +54,48 @@ export class CompanyProvider {
   }
 
   static getByID = async (id: number) => {
-    const data = await db.company.findUnique({
+    const company = await db.company.findUnique({
       where: {id},
       include: {
         members: true,
-        owner: true
-      }
-    }) || false;
-
-    const rate = await ReviewProvider.getAverageChatRating(id);
-    const totalChats = await db.chat.count({where: {id}});
-    const closedChats = await db.chat.count({where: {id, isClosed: true}});
-    const reviews = await db.chatReview.findMany({
-      where: {
-        chat: {
-          companyId: id
+        owner: true,
+        chats: {
+          include: {
+            reviews: true
+          }
         }
       }
-    })
+    }) || false;
+    if(!company) return false;
 
-    return {...data, rate, totalChats, closedChats, reviews};
+    const totalChats = company.chats.length;
+    const closedChats = company.chats.filter(chat => chat.isClosed).length;
+
+    // Собираем все отзывы для всех чатов компании
+    const allReviews = company.chats.flatMap(chat => chat.reviews);
+    const reviewCount = allReviews.length;
+
+    // Вычисляем средний рейтинг
+    const averageRating = reviewCount > 0
+        ? allReviews.reduce((sum, review) => sum + review.rating, 0) / reviewCount
+        : 0;
+
+    return {
+      id: company.id,
+      name: company.name,
+      description: company.description,
+      imgUrl: company.imgUrl,
+      ownerId: company.ownerId,
+      members: company.members,
+      owner: company.owner,
+      reviews: allReviews,
+      stats: {
+        totalChats,
+        closedChats,
+        averageRating: parseFloat(averageRating.toFixed(2)), // Округляем до 2 знаков
+        reviewCount
+      }
+    };
   }
 
   static getByLink = async (link: string) => {
