@@ -11,8 +11,8 @@ import {Slider} from "@/components/ui/slider";
 import {useState} from "react";
 import {Button} from "@/components/ui/button";
 import useChat from "@/hooks/useChat";
-import {ReviewData, sendOrganizationReview} from "@/api/organizations";
 import {Input} from "@/components/ui/input";
+import {ReviewData, sendOrganizationReview} from "@/api/review";
 
 const AddReviewModal = () => {
     const modal = useModal()

@@ -1,13 +1,13 @@
 import axios from "@/lib/axios";
 
-export interface CreateReviewData {
-  rating: number;
-  userId: number;
-  chatId: number;
-  text?: string;
+export interface ReviewData{
+  rating: number,
+  chatId:number,
+  text: string
 }
 
-// Оставить отзыв
-export const createReview = async (data: CreateReviewData) => {
-  return await axios.post("/review/", data);
+// Оставить рейтинг об организации
+export const sendOrganizationReview = async (data: ReviewData) => {
+  console.log(data);
+  return await axios.post(`/review`, data);
 }
