@@ -15,6 +15,7 @@ import CompanyRoute from "./route/company.route.ts";
 import ReviewRoute from "./route/review.route.ts";
 import {Logestic} from 'logestic';
 import { WebRTCService } from './service/webrtc.service.ts';
+import * as fs from "node:fs";
 
 export const backendLink = "http://localhost:8000";
 const app = new Elysia();
@@ -76,6 +77,10 @@ async function bootstrap() {
           .use(CompanyRoute)
           .use(ReviewRoute)
   );
+
+  if(fs.existsSync("files/")){
+    fs.mkdirSync("files");
+  }
 
   app.use(staticPlugin({
     prefix: "/files",
