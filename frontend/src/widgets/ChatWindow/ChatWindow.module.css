@@ -5,6 +5,7 @@
     gap: 12px;
 
     width: 100%;
+    max-width: 75vw;
     height: max-content;
 
     position: relative;
@@ -50,10 +51,17 @@
     border-radius: 16px;
 }
 
+@media (width < 900px) {
+    .wrapper {
+        max-width: 52vw;
+    }
+}
+
 @media (width < 651px) {
     .wrapper {
         padding: 8px 10px;
         max-height: 590px;
+        max-width: 95vw;
         overflow-y: scroll;
     }
 }
