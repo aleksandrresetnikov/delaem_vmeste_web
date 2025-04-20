@@ -78,7 +78,7 @@ async function bootstrap() {
           .use(ReviewRoute)
   );
 
-  if(fs.existsSync("files/")){
+  if(!fs.existsSync("files/")){
     fs.mkdirSync("files");
   }
 
