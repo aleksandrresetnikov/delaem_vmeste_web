@@ -2,7 +2,7 @@
 import s from './OrganizationModal.module.css'
 import React, {useState} from 'react';
 import useModal from "@/hooks/useModal";
-import {getOrganizationById, OrganizationData} from "@/api/organizations";
+import {ExtendedOrganizationData, getOrganizationById, OrganizationData} from "@/api/organizations";
 import {Sheet, SheetContent, SheetHeader, SheetTitle,} from "@/components/ui/sheet"
 import Image from 'next/image'
 import InfoBadge from "@/components/organizations/InfoBadge/InfoBadge";
@@ -16,7 +16,7 @@ import LoadingWrapper from "@/components/chats/LoadingWrapper/LoadingWrapper";
 import {checkRate, correctWordForm} from "@/helpers/organiztion.helpers";
 
 
-const ShowContent = (data: OrganizationData) => {
+const ShowContent = (data: ExtendedOrganizationData) => {
   const chat = useChat();
   const setOrganizationChat = async () => {
     const chatId = chat?.currentChat?.id;
@@ -35,7 +35,7 @@ const ShowContent = (data: OrganizationData) => {
             <div className={s.imageBlock}>
                 <Image
                     className={s.image}
-                    src={data?.imageUrl || '/icons/heart.png'}
+                    src={data?.imgUrl || '/icons/heart.png'}
                     width={400}
                     height={400}
                     alt={'Лого компании'}
@@ -50,13 +50,13 @@ const ShowContent = (data: OrganizationData) => {
                 <div className={s.badgeWrapper}>
                     <InfoBadge
                         type={'likes'}
-                        count={data.closedChats}
-                        text={correctWordForm(data.rate)}
+                        count={data.stats.closedChats}
+                        text={correctWordForm(data.stats.closedChats)}
                     />
                     <InfoBadge
                         type={'rate'}
-                        text={checkRate(data.rate)}
-                        count={data.rate}
+                        text={checkRate(data.stats.averageRating)}
+                        count={data.stats.averageRating}
                     />
 
           </div>
@@ -77,18 +77,18 @@ const ShowContent = (data: OrganizationData) => {
 //основной блок
 const OrganizationModal = () => {
     const [organizationInfo, setOrganizationInfo] =
-        useState<OrganizationData | null>(null)
+        useState<ExtendedOrganizationData | null>(null)
     const [isLoading, setIsLoading] = useState(false)
 
     const modal = useModal()
     const isOpen = modal?.isOpen('organization')
 
-    const fetchOrganizationData = async (id?: string) => {
+    const fetchOrganizationData = async (id?: number) => {
         if (id === undefined) return null
         setIsLoading(true)
         try {
             const {data} = await getOrganizationById(id)
-            console.log(data)
+            console.log(data, 'дата модалки')
             return data
         } catch (e) {
             console.log(e);
@@ -97,7 +97,7 @@ const OrganizationModal = () => {
             setIsLoading(false)
         }
     }
-    const Error = (id?: string) => {
+    const Error = (id?: number) => {
         return (
             <div className={s.error}>
                 <h4>Что то пошло не так</h4>
@@ -108,7 +108,8 @@ const OrganizationModal = () => {
 
     useAsync(async () => {
         if (isOpen) {
-            const data = await fetchOrganizationData(modal?.data?.organizationModal?.id)
+            const id = modal?.data?.organizationModal?.id
+            const data = await fetchOrganizationData(id)
             setOrganizationInfo(data)
         }
     }, [isOpen]);
