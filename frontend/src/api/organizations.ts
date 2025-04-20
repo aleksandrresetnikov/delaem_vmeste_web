@@ -66,6 +66,6 @@ export const generateOrganizationLink = async (orgId: number) => {
 }
 
 // Оставить рейтинг об организации
-export const sendOrganizationRate = async (orgId: number) => {
-  // return await axios.post(`/company/rate/${orgId}`);
+export const sendOrganizationRate = async (rating: number, chatId: number, text: string = "") => {
+  return await axios.post(`/review`, {rating, chatId, text});
 }

@@ -27,8 +27,9 @@ const AddRateModal = () => {
     }
 
     const handleSubmitRate = async () => {
-        const orgId = chat?.currentChat?.company.id
-        if (orgId) await sendOrganizationRate(orgId)
+        const chatId = chat?.currentChat?.id;
+        if (chatId) await sendOrganizationRate(rate, chatId);
+        await chat?.invalidateData();
         modal?.closeAll()
     }
 

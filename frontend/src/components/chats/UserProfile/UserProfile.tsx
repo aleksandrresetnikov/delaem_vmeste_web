@@ -52,7 +52,7 @@ const UserProfile = () => {
         <span className={styles.name}>{data.name}</span>
         <span className={styles.last}>{data.lastMessage}</span>
         {!chat.currentChat?.isClosed && chat.currentChat?.users[0].id === auth?.user?.id && <Button className={styles.addRate} onClick={handleCloseChat}>Закрыть чат</Button>}
-        {chat.currentChat?.isClosed && !chat.currentChat.reviews && <Button className={styles.addRate} onClick={handleAddRate}>Оставить отзыв</Button>}
+        {chat.currentChat?.isClosed && chat.currentChat.reviews?.length === 0 && <Button className={styles.addRate} onClick={handleAddRate}>Оставить отзыв</Button>}
         <div className={styles.buttons}>
           <PhoneCall/>
           <Video/>
