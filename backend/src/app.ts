@@ -64,7 +64,7 @@ async function bootstrap() {
     credentials: true,
     origin: 'http://localhost:3000',
     allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept, Authorization",
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"]
   }));
 
   // Подключение роутов

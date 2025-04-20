@@ -1,9 +1,11 @@
 import {Elysia} from 'elysia';
 import {getUserData} from '../middleware/authorization.middleware';
-import {PostChatGptBody, PostMessageBodyDto} from '../dto/chat.dto';
+import {ChatOrganizationPatchDto, PostChatGptBody, PostMessageBodyDto} from '../dto/chat.dto';
 import {ChatService} from '../service/chat.service';
 import {AuthService} from '../service/auth.service';
 import {ChatProvider} from "../providers/chat.provider.ts";
+import prisma from "../util/prisma.ts";
+import {CompanyProvider} from "../providers/company.provider.ts";
 
 const authRoutes = new Elysia({prefix: "/chat", detail: {tags: ["Chat"]}});
 
@@ -42,6 +44,42 @@ authRoutes.get("/:chatId", async (ctx) => {
     return err;
   }
 });
+
+// ендпойнт для выбора организации в чате
+authRoutes.patch("/:chatId/organization/:organizationId", async (ctx) => {
+  try {
+    // Получаем аккаунт по хидеру авторизации
+    const userData = await getUserData(ctx);
+    if (!userData) return ctx.set.status = 401;
+
+    if (!await AuthService.checkFullUserRules(userData.id)) return ctx.set.status = 401;
+
+    const {chatId, organizationId} = ctx.params;
+
+    const chatData = await ChatProvider.getById(chatId);
+    if(!chatData || chatData.companyId) return ctx.set.status = 403;
+
+    const organizationData = await CompanyProvider.getByID(organizationId);
+    if(!organizationData || !organizationData.members) return ctx.set.status = 404;
+
+    await prisma.chat.update({where:{id: chatId}, data: {
+      company: {
+        connect: {
+          id: organizationId
+        }
+      }
+      }})
+
+    for(let member of organizationData.members) {
+      if(organizationData.members.map(item => item.id).includes(member.id)) continue;
+      await ChatProvider.addUserToChat(member.id, chatId);
+    }
+  } catch (err) {
+    ctx.set.status = 500;
+    console.error(err);
+    return err;
+  }
+}, {params: ChatOrganizationPatchDto});
 
 authRoutes.get("/message/:chatId", async (ctx) => {
   try {
