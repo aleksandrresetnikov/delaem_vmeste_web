@@ -279,7 +279,7 @@ const UserProfile = () => {
           {!chat.currentChat?.isClosed && chat.currentChat?.users[0].id === auth?.user?.id && (
               <Button className={styles.addRate} onClick={handleCloseChat}>Закрыть чат</Button>
           )}
-          {chat.currentChat?.isClosed && chat.currentChat.reviews?.length === 0 && (
+          {chat.currentChat?.isClosed && chat.currentChat?.users[0].id === auth?.user?.id && chat.currentChat.reviews?.length === 0 && (
               <Button className={styles.addRate} onClick={handleAddRate}>Оставить отзыв</Button>
           )}
           <div className={styles.buttons}>
