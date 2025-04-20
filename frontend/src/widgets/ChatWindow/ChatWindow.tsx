@@ -39,7 +39,7 @@ const ChatWindow = () => {
                 time={item.createdOn.toString()}
                 byMe={item.userId === auth.user.id && !item.content.ai}
                 byAi={item.content.ai || false}>
-              <Button variant={"link"} onClick={() => router.push(item.content.link)}>Отправлен файл</Button>
+              <Button variant={"link"} onClick={() => item.content.link && router.push(item.content.link)}>Отправлен файл</Button>
             </Bubble>
         )
       }

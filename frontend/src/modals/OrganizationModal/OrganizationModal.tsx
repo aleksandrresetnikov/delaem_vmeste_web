@@ -83,7 +83,7 @@ const OrganizationModal = () => {
     const modal = useModal()
     const isOpen = modal?.isOpen('organization')
 
-    const fetchOrganizationData = async (id?: string) => {
+    const fetchOrganizationData = async (id?: number) => {
         if (id === undefined) return null
         setIsLoading(true)
         try {
@@ -97,7 +97,7 @@ const OrganizationModal = () => {
             setIsLoading(false)
         }
     }
-    const Error = (id?: string) => {
+    const Error = (id?: number) => {
         return (
             <div className={s.error}>
                 <h4>Что то пошло не так</h4>

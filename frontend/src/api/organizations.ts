@@ -60,7 +60,7 @@ export const createOrganization = async (data: CreateOrganizationData) => {
 }
 
 // Получить организацию по ID
-export const getOrganizationById = async (id: string): Promise<AxiosResponse<OrganizationData>> => {
+export const getOrganizationById = async (id: number): Promise<AxiosResponse<OrganizationData>> => {
   return await axios.get(`/company/${id}`);
 }
 

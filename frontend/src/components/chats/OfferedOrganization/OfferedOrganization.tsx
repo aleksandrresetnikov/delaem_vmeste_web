@@ -7,7 +7,7 @@ import InfoBadge from "@/components/organizations/InfoBadge/InfoBadge";
 import useModal from "@/hooks/useModal";
 
 interface OfferedOrganizationProps {
-    orgId: string,
+    orgId: number,
     isBest: boolean
 }
 
@@ -21,7 +21,6 @@ const OfferedOrganization: FC<OfferedOrganizationProps> = ({orgId, isBest}) => {
     }, [orgId]);
 
     const handleShowInfo = () => {
-
         modal?.switchModal('organization', {
             organizationModal: {
                 id: orgId
