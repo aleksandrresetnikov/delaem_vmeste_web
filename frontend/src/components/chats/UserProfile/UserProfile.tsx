@@ -16,7 +16,7 @@ const UserProfile = () => {
   const [data, setData] = useState<UIChatData | boolean>(false);
 
   const refreshChatInfo = () => {
-    if (chat && chat.currentChat) setData(chat.getCurrentProfileInfo());
+    if (chat && chat.currentChat && auth?.user?.id) setData(chat.getCurrentProfileInfo(auth.user.id));
   }
 
   useEffect(() => {

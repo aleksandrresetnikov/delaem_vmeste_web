@@ -138,9 +138,9 @@ const Authorization = ({asVolunteer, createOrg}: { asVolunteer: boolean, createO
 
     console.log(data);
     // Проверяем поля (делается на быструю руку, сорян, я знаю что нужно делать верификацию формы через zod и regexp)
-    if (data.address === "" || data.skills === "" || data.birthDate === "" || data.fullname === "") return;
+    if (data.address === "" || data.birthDate === "" || data.fullname === "" || data.phone === "") return;
     if (asVolunteer && data.skills === "") return;
-    if (selectedCategories.length < 1) return;
+    if (!asVolunteer && selectedCategories.length < 1) return;
     try {
       await fetchProfileUpdate({
         ...data as IFormResult,
