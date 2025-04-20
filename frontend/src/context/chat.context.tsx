@@ -28,6 +28,7 @@ interface ChatContextType {
   sendNewMessage: (chatId: number, data: SendMessageData) => Promise<void>;
   parseChat: (data: ChatInListProps) => UIChatData;
   getCurrentProfileInfo: () => UIChatData | boolean;
+  invalidateData: () => void;
 }
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
@@ -133,6 +134,11 @@ export const ChatProvider = ({children}: ChatProviderProps) => {
     setSelectedChat(id);
   }, []);
 
+  // Перезагрузить все динамические данные
+  const invalidateData = async () => {
+    setTimeout(async () => await queryClient.refetchQueries({queryKey: ['chats', 'messages']}), 150);
+  }
+
   const parseChat = (data: ChatInListProps) => {
     const username = data.chat.companyId === null ? "Новый чат" : data.chat.company?.name || "Неизвестный чат";
     const msg = data.chat.messages[0]?.content?.text || "";
@@ -204,7 +210,8 @@ export const ChatProvider = ({children}: ChatProviderProps) => {
     fetchChatInfo,
     sendNewMessage,
     parseChat,
-    getCurrentProfileInfo
+    getCurrentProfileInfo,
+    invalidateData
   };
 
   return (

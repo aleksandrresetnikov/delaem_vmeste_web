@@ -4,13 +4,8 @@
     align-items: center;
     gap: 12px;
 
-    background: var(--accent);
-    padding: 12px 32px;
-    border-radius: 16px;
-
     width: 100%;
-    height: 100%;
-    overflow-y: auto;
+    height: max-content;
 
     position: relative;
 }
@@ -43,6 +38,16 @@
 
 :global(.dark) .profile > div {
     background: rgba(35, 35, 45, 0.4);
+}
+
+.scroll {
+    height: 100%;
+    width: 100%;
+    overflow-y: auto;
+
+    background: var(--accent);
+    padding: 12px 32px;
+    border-radius: 16px;
 }
 
 @media (width < 651px) {

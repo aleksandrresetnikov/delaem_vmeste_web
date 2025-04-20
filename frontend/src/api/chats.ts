@@ -4,7 +4,7 @@ import {ChatReview, ChatToUser, Company, MessageType} from "../../../backend/gen
 import {ChatInListProps} from "@/context/chat.context";
 
 export interface CreateChatData {
-  users: number[];
+  prompt: string;
 }
 
 export interface GetMessagesParams {
@@ -45,7 +45,9 @@ export interface IChatInfo {
 }
 
 export interface SendMessageData {
-  text: string;
+  content: {
+    text: string;
+  }
 }
 
 // Получить чаты
