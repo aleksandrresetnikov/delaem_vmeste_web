@@ -13,7 +13,7 @@ interface OfferedOrganizationProps {
 
 const OfferedOrganization: FC<OfferedOrganizationProps> = ({orgId, isBest}) => {
     const [orgData, setOrgData] = useState<OrganizationData | null>(null)
-    const modal = useModal()
+    const modal = useModal();
 
     useAsync(async () => {
         const {data} = await getOrganizationById(orgId)

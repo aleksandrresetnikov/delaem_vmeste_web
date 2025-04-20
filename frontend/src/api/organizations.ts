@@ -9,14 +9,14 @@ export interface CreateOrganizationData {
 
 // Комментарий
 export interface IComment {
-  id: string,
+  id: number,
   author: string,
   text: string
 }
 
 // Вся информация о карточке
 export interface OrganizationData {
-  id: string,
+  id: number,
   name: string,
   description?: string,
   imageUrl?: string,
@@ -28,16 +28,17 @@ export interface OrganizationData {
 
 // Краткая информация о карточке
 export interface OrganizationCardData {
-  id: string,
-  title: string,
+  id: number,
+  name: string,
   rate: number,
   description?: string,
-  imageUrl?: string,
+  imgUrl?: string,
 }
 
-export interface OrganizationReview{
-  rate: number,
-  review?: string
+export interface ReviewData{
+  rating: number,
+  chatId:number,
+  review: string
 }
 
 // Получить организации
@@ -71,6 +72,6 @@ export const generateOrganizationLink = async (orgId: number) => {
 }
 
 // Оставить рейтинг об организации
-export const sendOrganizationReview= async (id: number, data: OrganizationReview) => {
-  // return await axios.post(`/company/review/${id}`, data)
+export const sendOrganizationReview = async (data: ReviewData) => {
+  return await axios.post(`/review`, data);
 }

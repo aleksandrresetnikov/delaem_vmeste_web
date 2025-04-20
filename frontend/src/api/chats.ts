@@ -71,6 +71,15 @@ export const getChatById = async (chatId: number) => {
   return await axios.get(`/chat/${chatId}`);
 }
 
+// Выбрать организацию для чата
+export const selectChatOrganization = async (chatId: number, organizationId: number) => {
+  return await axios.patch(`/chat/${chatId}/organization/${organizationId}`, {});
+}
+
+// Выбрать организацию для чата
+export const closeChat = async (chatId: number) => {
+  return await axios.patch(`/chat/close/${chatId}`, {});
+}
 
 // Получить сообщения в чате
 export const getChatMessages = async (chatId: number, params?: GetMessagesParams) => {

@@ -27,7 +27,7 @@ interface ChatContextType {
   fetchChatInfo: (chatId: number) => Promise<void>;
   sendNewMessage: (chatId: number, data: SendMessageData) => Promise<void>;
   parseChat: (data: ChatInListProps) => UIChatData;
-  getCurrentProfileInfo: () => UIChatData | boolean;
+  getCurrentProfileInfo: (myChatId: number) => UIChatData | boolean;
   invalidateData: () => void;
 }
 
@@ -151,10 +151,18 @@ export const ChatProvider = ({children}: ChatProviderProps) => {
   }
 
   // Получить инфо о профиле
-  const getCurrentProfileInfo = () => {
+  const getCurrentProfileInfo = (myUserId: number) => {
     if (!currentChat) return false;
+    let username: string = "";
 
-    const username = !currentChat.company ? "Новый чат" : currentChat.company?.name || "Неизвестный чат";
+    if(currentChat.users[0] && currentChat.users[0].id !== myUserId) {
+      // Если сообщение отправлено не мной
+      username = !currentChat.users[0].fullname ? "Новый чат" : currentChat.users[0].fullname || "Неизвестный чат";
+    } else {
+      // Если мной
+      username = !currentChat.company ? "Новый чат" : currentChat.company?.name || "Неизвестный чат";
+    }
+
     const msg = currentChat.messages[0]?.content?.text || "";
 
     return {

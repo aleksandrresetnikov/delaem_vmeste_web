@@ -4,7 +4,11 @@ import {UserProvider} from "../providers/user.provider.ts";
 
 export class ReviewService {
   static createReview = async (rating: number, userId: number, chatId: number, text?: string) => {
-    if (!ChatProvider.hasUserInChat(chatId, userId)) return false;
+    if (!await ChatProvider.hasUserInChat(chatId, userId)) return false;
+
+    await ChatProvider.addMessage(userId, chatId, "STATUS", {
+      text: "Поставлена оценка: " + rating
+    })
 
     return await ReviewProvider.createReview({rating, text, userId, chatId});
   }

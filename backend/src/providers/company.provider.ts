@@ -5,7 +5,43 @@ import {ReviewProvider} from "./review.provider.ts";
 
 export class CompanyProvider {
   static listAll = async () => {
-    return await db.company.findMany({});
+    const companies = await db.company.findMany({
+      include: {
+        chats: {
+          include: {
+            reviews: true
+          }
+        }
+      }
+    });
+
+    return companies.map(company => {
+      const totalChats = company.chats.length;
+      const closedChats = company.chats.filter(chat => chat.isClosed).length;
+
+      // Собираем все отзывы для всех чатов компании
+      const allReviews = company.chats.flatMap(chat => chat.reviews);
+      const reviewCount = allReviews.length;
+
+      // Вычисляем средний рейтинг
+      const averageRating = reviewCount > 0
+          ? allReviews.reduce((sum, review) => sum + review.rating, 0) / reviewCount
+          : 0;
+
+      return {
+        id: company.id,
+        name: company.name,
+        description: company.description,
+        imgUrl: company.imgUrl,
+        ownerId: company.ownerId,
+        stats: {
+          totalChats,
+          closedChats,
+          averageRating: parseFloat(averageRating.toFixed(2)), // Округляем до 2 знаков
+          reviewCount
+        }
+      };
+    });
   }
 
   static getCompanyChats = async (chatId: number): Promise<Chat[] | false> => {

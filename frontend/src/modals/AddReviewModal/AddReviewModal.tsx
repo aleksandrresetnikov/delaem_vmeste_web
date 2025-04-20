@@ -3,8 +3,6 @@ import s from './AddReviewModal.module.css'
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
@@ -13,7 +11,7 @@ import {Slider} from "@/components/ui/slider";
 import {useState} from "react";
 import {Button} from "@/components/ui/button";
 import useChat from "@/hooks/useChat";
-import {OrganizationReview, sendOrganizationReview} from "@/api/organizations";
+import {ReviewData, sendOrganizationReview} from "@/api/organizations";
 import {Input} from "@/components/ui/input";
 
 const AddReviewModal = () => {
@@ -21,7 +19,7 @@ const AddReviewModal = () => {
     const chat = useChat()
     const isOpen = modal?.isOpen('rate')
 
-    const [rate, setRate] = useState(5)
+    const [rating, setRating] = useState(5)
     const [review, setReview] = useState('')
 
 
@@ -30,18 +28,22 @@ const AddReviewModal = () => {
     }
 
     const handleSubmitRate = async () => {
-        const orgId = chat?.currentChat?.company.id
-        const reviewData: OrganizationReview = {
-            rate,
-            review: review.trim() || undefined
+        const chatId = chat?.currentChat?.id;
+        if (chatId){
+            const reviewData: ReviewData = {
+                rating,
+                chatId,
+                review: review.trim()
+            }
+            await sendOrganizationReview(reviewData);
         }
-        if (orgId) await sendOrganizationReview(orgId, reviewData)
         setReview('')
+        chat?.invalidateData();
         modal?.closeAll()
     }
 
     return (
-        <Dialog open={true} onOpenChange={onClose}>
+        <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle/>
@@ -50,12 +52,13 @@ const AddReviewModal = () => {
                 </DialogHeader>
                 <div className={s.wrapper}>
                     <div className={s.contentWrapper}>
-                        <h2>{rate.toFixed(1)}</h2>
+                        <h2>{rating.toFixed(1)}</h2>
                         <Slider
                             defaultValue={[5]}
                             max={5}
+                            min={1}
                             step={0.2}
-                            onValueChange={(value) => setRate(value[0])}
+                            onValueChange={(value) => setRating(value[0])}
                         />
                     </div>
 
@@ -67,5 +70,4 @@ const AddReviewModal = () => {
         </Dialog>
     )
 }
-
 export default AddReviewModal
