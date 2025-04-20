@@ -26,7 +26,7 @@ interface ChatContextType {
   createNewChat: (data: CreateChatData) => Promise<void>;
   fetchChatInfo: (chatId: number) => Promise<void>;
   sendNewMessage: (chatId: number, data: SendMessageData) => Promise<void>;
-  parseChat: (data: ChatInListProps) => UIChatData;
+  parseChat: (data: ChatInListProps, myUserId: number) => UIChatData;
   getCurrentProfileInfo: (myChatId: number) => UIChatData | boolean;
   invalidateData: () => void;
 }
@@ -138,8 +138,19 @@ export const ChatProvider = ({children}: ChatProviderProps) => {
     setTimeout(async () => await queryClient.refetchQueries({queryKey: ['chats', 'messages']}), 150);
   }
 
-  const parseChat = (data: ChatInListProps) => {
-    const username = data.chat.companyId === null ? "Новый чат" : data.chat.company?.name || "Неизвестный чат";
+  const parseChat = (data: ChatInListProps, myUserId: number) => {
+    let username: string = "";
+
+    console.log(data.chat);
+
+    if(data.chat.users[0].user && data.chat.users[0].user.id !== myUserId) {
+      // Если сообщение отправлено не мной
+      username = !data.chat.users[0].user.fullname ? "Новый чат" : data.chat.users[0].user.fullname || "Неизвестный чат";
+    } else {
+      // Если мной
+      username = data.chat.companyId === null ? "Новый чат" : data.chat.company?.name || "Неизвестный чат";
+    }
+
     const msg = data.chat.messages[0]?.content?.text || "";
 
     return {
