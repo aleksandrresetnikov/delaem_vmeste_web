@@ -1,11 +1,12 @@
 import {Elysia} from 'elysia';
 import {getUserData} from '../middleware/authorization.middleware';
-import {ChatOrganizationPatchDto, PostChatGptBody, PostMessageBodyDto} from '../dto/chat.dto';
+import {ChatOrganizationPatchDto, PostChatGptBody, PostMessageBodyDto, PostMessageFileBodyDto} from '../dto/chat.dto';
 import {ChatService} from '../service/chat.service';
 import {AuthService} from '../service/auth.service';
 import {ChatProvider} from "../providers/chat.provider.ts";
 import prisma from "../util/prisma.ts";
 import {CompanyProvider} from "../providers/company.provider.ts";
+import {write} from "bun";
 
 const authRoutes = new Elysia({prefix: "/chat", detail: {tags: ["Chat"]}});
 
@@ -57,21 +58,23 @@ authRoutes.patch("/:chatId/organization/:organizationId", async (ctx) => {
     const {chatId, organizationId} = ctx.params;
 
     const chatData = await ChatProvider.getById(chatId);
-    if(!chatData || chatData.companyId) return ctx.set.status = 403;
+    if (!chatData || chatData.companyId) return ctx.set.status = 403;
 
     const organizationData = await CompanyProvider.getByID(organizationId);
-    if(!organizationData || !organizationData.members) return ctx.set.status = 404;
+    if (!organizationData || !organizationData.members) return ctx.set.status = 404;
 
-    await prisma.chat.update({where:{id: chatId}, data: {
-      company: {
-        connect: {
-          id: organizationId
+    await prisma.chat.update({
+      where: {id: chatId}, data: {
+        company: {
+          connect: {
+            id: organizationId
+          }
         }
       }
-      }})
+    })
 
-    for(let member of organizationData.members) {
-      if(!chatData.users.map(item => item.id).includes(member.id)) {
+    for (let member of organizationData.members) {
+      if (!chatData.users.map(item => item.id).includes(member.id)) {
         await ChatProvider.addUserToChat(member.id, chatId);
       }
     }
@@ -114,7 +117,7 @@ authRoutes.post("/message/:chatId", async (ctx) => {
     const {chatId} = ctx.params;
 
     // Отправлять можно только текст
-    if(!ctx.body.content.text) return;
+    if (!ctx.body.content.text) return;
 
     if (ctx.body.content.text.toLowerCase() === "человек") {
       const result = await ChatService.searchOrganizationForUser(+ctx.params.chatId, userData.id);
@@ -130,6 +133,21 @@ authRoutes.post("/message/:chatId", async (ctx) => {
     return err;
   }
 }, {body: PostMessageBodyDto});
+
+authRoutes.post("/message/file/:chatId", async (ctx) => {
+  const file = ctx.body.file;
+
+  if (!file) {
+    throw new Error('No file uploaded');
+  }
+
+  const fileName = `${Date.now()}_${file.name}`;
+  const filePath = `./files/${fileName}`;
+
+  await write(filePath, file);
+
+  return {success: true, path: filePath};
+}, {body: PostMessageFileBodyDto});
 
 authRoutes.post("/", async (ctx) => {
   try {
