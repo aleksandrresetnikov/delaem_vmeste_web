@@ -77,7 +77,7 @@ export const ChatProvider = ({children}: ChatProviderProps) => {
     queryFn: async () => {
       return await fetchChats();
     },
-    refetchInterval: 2000,
+    refetchInterval: 1200,
     staleTime: 1000
   });
 
