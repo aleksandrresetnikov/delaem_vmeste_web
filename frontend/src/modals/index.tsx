@@ -1,11 +1,11 @@
 import OrganizationModal from "@/modals/OrganizationModal/OrganizationModal";
-import AddRateModal from "@/modals/AddRateModal/AddRateModal";
+import AddReviewModal from "@/modals/AddReviewModal/AddReviewModal";
 
 
 const Modals = () => {
     return (
         <>
-            <AddRateModal/>
+            <AddReviewModal/>
             <OrganizationModal/>
         </>
     );

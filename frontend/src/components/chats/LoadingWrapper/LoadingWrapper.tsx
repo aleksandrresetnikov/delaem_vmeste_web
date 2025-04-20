@@ -5,7 +5,7 @@ import s from "./LoadingWrapper.module.css";
 const LoadingWrapper = () => {
   return (
       <div className={s.wrapper}>
-        <LoadingSpinner size={100}/>
+        <LoadingSpinner />
       </div>
   );
 };
