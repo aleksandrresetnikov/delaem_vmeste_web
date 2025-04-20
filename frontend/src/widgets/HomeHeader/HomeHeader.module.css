@@ -18,10 +18,11 @@
     color: var(--primary);
 }
 
-.active{
+.active {
     position: relative;
 }
-.active::after{
+
+.active::after {
     content: '';
     position: absolute;
     bottom: 0;

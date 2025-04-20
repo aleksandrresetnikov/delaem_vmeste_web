@@ -65,7 +65,7 @@
     backdrop-filter: blur(5);
 }
 
-.badgeContainer{
+.badgeContainer {
     display: flex;
     width: 100%;
     align-items: start;

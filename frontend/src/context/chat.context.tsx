@@ -143,7 +143,7 @@ export const ChatProvider = ({children}: ChatProviderProps) => {
     let username: string = "";
 
     // @ts-ignore
-    if(data?.chat?.users && data.chat.users[0] && data.chat.users[0].user && data.chat.users[0].user.id !== myUserId) {
+    if (data?.chat?.users && data.chat.users[0] && data.chat.users[0].user && data.chat.users[0].user.id !== myUserId) {
       // Если сообщение отправлено не мной
       // @ts-ignore
       username = !data.chat.users[0].user.fullname ? "Новый чат" : data.chat.users[0].user.fullname || "Неизвестный чат";
@@ -166,7 +166,7 @@ export const ChatProvider = ({children}: ChatProviderProps) => {
     if (!currentChat) return false;
     let username: string = "";
 
-    if(currentChat.users[0] && currentChat.users[0].id !== myUserId) {
+    if (currentChat.users[0] && currentChat.users[0].id !== myUserId) {
       // Если сообщение отправлено не мной
       // @ts-ignore
       username = !currentChat.users[0].fullname ? "Новый чат" : currentChat.users[0].fullname || "Неизвестный чат";
@@ -210,7 +210,6 @@ export const ChatProvider = ({children}: ChatProviderProps) => {
       throw error;
     }
   }, [sendMessageMutation]);
-
 
 
   const isChats = useMemo(() => chatList && chatList.length > 0, [chatList]);

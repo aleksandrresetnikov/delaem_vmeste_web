@@ -24,7 +24,7 @@ const ChatWindow = () => {
     if (!auth?.user?.id) return;
 
     if (item.type === "DEFAULT") {
-      if(item.content.text){
+      if (item.content.text) {
         return (
             <Bubble
                 time={item.createdOn.toString()}
@@ -33,13 +33,14 @@ const ChatWindow = () => {
               {item.content.text}
             </Bubble>
         )
-      } else if(item.content.link){
+      } else if (item.content.link) {
         return (
             <Bubble
                 time={item.createdOn.toString()}
                 byMe={item.userId === auth.user.id && !item.content.ai}
                 byAi={item.content.ai || false}>
-              <Button variant={"link"} onClick={() => item.content.link && router.push(item.content.link)}>Отправлен файл</Button>
+              <Button variant={"link"} onClick={() => item.content.link && router.push(item.content.link)}>Отправлен
+                файл</Button>
             </Bubble>
         )
       }
@@ -58,16 +59,21 @@ const ChatWindow = () => {
 
   return (
       <div className={styles.scroll} ref={$window}>
+        {/* Нет чатов вообще */}
+        {
+            !chat?.isChats || chat?.selectedChat === -1 &&
+            (<div className={styles.hint}>
+              <h4>Опишите проблему</h4>
+              <p>Мы подберем подходящее решение для Вас</p>
+            </div>)
+        }
+        {
+            chat?.chatLoading && <LoadingWrapper/>
+        }
+
+
         <div className={styles.wrapper} ref={$w2}>
 
-          {/* Нет чатов вообще */}
-          {
-              !chat?.isChats || chat?.selectedChat === -1 &&
-              (<div className={styles.hint}>
-                <h4>Опишите проблему</h4>
-                <p>Мы подберем подходящее решение для Вас</p>
-              </div>)
-          }
 
           {/* Профиль организации/юзера */}
           {
@@ -75,9 +81,6 @@ const ChatWindow = () => {
               <div className={styles.profile}><UserProfile/></div>
           }
 
-          {
-              chat?.chatLoading && <LoadingWrapper/>
-          }
 
           {
               chat?.messages && chat?.messages.map(item => renderMessage(item))

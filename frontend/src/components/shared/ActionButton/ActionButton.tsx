@@ -3,7 +3,7 @@ import React, {HTMLAttributes} from 'react';
 import Image from "next/image";
 import {Button} from "@/components/ui/button";
 
-interface IActionButtonProps extends HTMLAttributes<HTMLButtonElement>{
+interface IActionButtonProps extends HTMLAttributes<HTMLButtonElement> {
   action: string,
   variant?: "link" | "default" | "destructive" | "outline" | "secondary" | "ghost" | null | undefined;
 }

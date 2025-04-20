@@ -33,7 +33,7 @@ const HomeHeader = () => {
   };
 
   const copyLink = () => {
-    if(!auth?.user?.ownedCompany.links) return;
+    if (!auth?.user?.ownedCompany.links) return;
     copyToClipboard(`http://api.tula.vyatkaowls.ru/join/${auth?.user?.ownedCompany.links[0].link || ""}`);
     toast.success("Ссылка скопирована!");
   }
@@ -56,7 +56,8 @@ const HomeHeader = () => {
                 <>
                   <DropdownMenuLabel>Ссылка на вступление в организацию</DropdownMenuLabel>
                   <DropdownMenuItem>
-                    <Input type={"text"} value={`http://api.tula.vyatkaowls.ru/join/${auth?.user?.ownedCompany?.links[0]?.link || ""}`}/>
+                    <Input type={"text"}
+                           value={`http://api.tula.vyatkaowls.ru/join/${auth?.user?.ownedCompany?.links[0]?.link || ""}`}/>
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={copyLink}>
                     <Button>Скопировать ссылку</Button>
@@ -102,7 +103,7 @@ const HomeHeader = () => {
           <nav className={styles.nav}>
             {HomeHeaderData.map(item => (
                 <Link key={item.title} href={item.url}
-                      className={cn(pathname === item.url && styles.active) }>
+                      className={cn(pathname === item.url && styles.active)}>
                   {item.title}
                 </Link>
             ))}

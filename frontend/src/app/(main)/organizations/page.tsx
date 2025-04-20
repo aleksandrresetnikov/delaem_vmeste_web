@@ -1,13 +1,13 @@
 'use client'
 import s from './volunteers.module.css'
 import React, {useState} from 'react';
-import {fetchOrganizations, OrganizationCardData} from "@/api/organizations";
+import {fetchOrganizations, OrganizationData} from "@/api/organizations";
 import CardList from "@/widgets/CardList/CardList";
 import Search from "@/components/organizations/Search/Search";
 import {useAsync} from "react-use";
 
 const Page = () => {
-  const [cardData, setCardData] = useState<OrganizationCardData[]>([])
+  const [cardData, setCardData] = useState<OrganizationData[]>([])
   useAsync(async () => {
     try {
       const {data} = await fetchOrganizations()

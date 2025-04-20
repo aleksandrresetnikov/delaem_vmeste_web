@@ -64,7 +64,7 @@ async function bootstrap() {
   // Настройка CORS
   app.use(cors({
     credentials: true,
-    origin: 'http://localhost:3000',
+    origin: 'http://tula.vyatkaowls.ru',
     allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept, Authorization",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"]
   }));

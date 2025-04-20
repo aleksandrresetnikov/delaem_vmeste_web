@@ -106,7 +106,6 @@
 }
 
 
-
 .completionForm label {
     font-size: 15pt;
     font-weight: 600;
@@ -191,7 +190,7 @@
     left: 0;
     top: 0;
     width: 40%;
-    transform: rotate(60deg) translateX(-30%)  translateY(10%);
+    transform: rotate(60deg) translateX(-30%) translateY(10%);
 }
 
 .decoration_left_pos2 {

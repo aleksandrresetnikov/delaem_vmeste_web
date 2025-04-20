@@ -1,8 +1,8 @@
 import React, {ReactNode} from 'react';
 import styles from "./Bubble.module.css";
 import {cn} from "@/lib/utils";
-import {format,parseISO} from "date-fns";
-import { Bot } from 'lucide-react';
+import {format, parseISO} from "date-fns";
+import {Bot} from 'lucide-react';
 
 interface BubbleProps {
   children: ReactNode | string;
@@ -23,7 +23,7 @@ const Bubble: React.FC<BubbleProps> = ({children, byMe, time, byAi = false}) => 
           {typeof children === "string" ? <span>{children}</span> : children}
         </div>
         <span className={styles.time}>{parseTime(time)}</span>
-        {byAi && <Bot className={styles.ai} />}
+        {byAi && <Bot className={styles.ai}/>}
       </div>
   );
 };

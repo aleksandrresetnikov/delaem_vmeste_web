@@ -30,7 +30,10 @@ const Authorization = ({asVolunteer, createOrg}: { asVolunteer: boolean, createO
   const [animationKey, setAnimationKey] = useState<number>(0);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
-  const [organizationData, setOrganizationData] = useState<{name: string, description: string}>({name: "", description: ""});
+  const [organizationData, setOrganizationData] = useState<{ name: string, description: string }>({
+    name: "",
+    description: ""
+  });
 
   const [timeLeft, setTimeLeft] = useState<number>(TIMER_INITIAL_VALUE);
 
@@ -95,7 +98,7 @@ const Authorization = ({asVolunteer, createOrg}: { asVolunteer: boolean, createO
       if (result.status === 200 && result.data) {
         auth?.login(result.data.token);
         await auth?.updateProfile();
-        if(!auth?.user?.role) {
+        if (!auth?.user?.role) {
           setStep(STEPS.COMPLETE);
           setCode(0);
         } else {
@@ -148,7 +151,7 @@ const Authorization = ({asVolunteer, createOrg}: { asVolunteer: boolean, createO
       await fetchProfileUpdate({
         ...data as IFormResult,
         username: (email || auth?.user?.email || "something@happend").split("@")[0],
-        role: !auth?.user?.role ? (asVolunteer ? "VOLUNTEER" : "MEMBER"): undefined
+        role: !auth?.user?.role ? (asVolunteer ? "VOLUNTEER" : "MEMBER") : undefined
       });
       if (asVolunteer) {
         setStep(STEPS.ORGANIZATION)
@@ -163,14 +166,14 @@ const Authorization = ({asVolunteer, createOrg}: { asVolunteer: boolean, createO
 
   // Создать организацию
   const handleOrganizationCreate = async () => {
-    if(organizationData.name === "" || organizationData.description === "") return;
+    if (organizationData.name === "" || organizationData.description === "") return;
 
     try {
       await createOrganization(organizationData);
       const result = await auth?.updateProfile();
 
-      if(typeof result === "boolean" || !result) throw Error("Failed to fetch");
-      if(!result.ownedCompany?.id) throw Error("No owner company in profile");
+      if (typeof result === "boolean" || !result) throw Error("Failed to fetch");
+      if (!result.ownedCompany?.id) throw Error("No owner company in profile");
 
       await generateOrganizationLink(result.ownedCompany.id);
       router.push("/messages");
@@ -317,8 +320,10 @@ const Authorization = ({asVolunteer, createOrg}: { asVolunteer: boolean, createO
     return (
         <div className={s.completionForm}>
           <div className={s.orgSelectForm}>
-            <Input type={"text"} placeholder={"Название организации"} onChange={(e) => setOrganizationData({...organizationData, name: e.target.value})} />
-            <Textarea placeholder={"Описание вашей организации (чем она занимается?)"} onChange={(e) => setOrganizationData({...organizationData, description: e.target.value})} />
+            <Input type={"text"} placeholder={"Название организации"}
+                   onChange={(e) => setOrganizationData({...organizationData, name: e.target.value})}/>
+            <Textarea placeholder={"Описание вашей организации (чем она занимается?)"}
+                      onChange={(e) => setOrganizationData({...organizationData, description: e.target.value})}/>
             <Button onClick={handleOrganizationCreate}>Создать сейчас!</Button>
             <Button variant="link" onClick={() => router.push("/messages")}>Создам позже или войду по ссылке</Button>
           </div>

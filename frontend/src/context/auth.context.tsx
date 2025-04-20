@@ -1,5 +1,5 @@
 "use client";
-import React, {createContext, ReactNode, useEffect, useState} from 'react';
+import React, {createContext, ReactNode, useState} from 'react';
 import {IUser} from "@/types/user.interface";
 import {fetchProfile} from "@/api/profile";
 import {useAsync} from "react-use";
@@ -25,14 +25,14 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
   // Обновить данные профиля
   const updateProfile = async () => {
     const token = localStorage.getItem('token');
-    if(!token) setLoading(false);
+    if (!token) setLoading(false);
 
     try {
       const response = await fetchProfile();
       setUser(response.data);
       setLoading(false);
       return response.data;
-    } catch(e){
+    } catch (e) {
       console.error(e);
       setUser(null);
       setLoading(false);

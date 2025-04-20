@@ -1,20 +1,19 @@
 "use client";
 import React, {createContext, ReactNode, useState} from 'react';
-import {OrganizationCardData} from "@/api/organizations";
 
 export type ModalsList =
     "none"
     | "organization"
     | "rate";
 
-interface RateModalData{
+interface RateModalData {
   chatId: number
 }
 
 //возможные данные в модалках
 interface ModalData {
   //OrganizationModal
-  organizationModal?: {id: number}
+  organizationModal?: { id: number }
   rateModal?: RateModalData
 }
 
