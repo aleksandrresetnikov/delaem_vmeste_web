@@ -18,6 +18,7 @@
 /out/
 
 # production
+bun.lockb
 /build
 
 # misc
