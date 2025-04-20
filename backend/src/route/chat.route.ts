@@ -3,6 +3,7 @@ import {getUserData} from '../middleware/authorization.middleware';
 import {PostChatGptBody, PostMessageBodyDto} from '../dto/chat.dto';
 import {ChatService} from '../service/chat.service';
 import {AuthService} from '../service/auth.service';
+import {ChatProvider} from "../providers/chat.provider.ts";
 
 const authRoutes = new Elysia({prefix: "/chat", detail: {tags: ["Chat"]}});
 
@@ -73,7 +74,10 @@ authRoutes.post("/message/:chatId", async (ctx) => {
 
     const {chatId} = ctx.params;
 
-    if (ctx.body.content.toLowerCase() === "человек") {
+    // Отправлять можно только текст
+    if(!ctx.body.content.text) return;
+
+    if (ctx.body.content.text.toLowerCase() === "человек") {
       const result = await ChatService.searchOrganizationForUser(+ctx.params.chatId, userData.id);
       if (!result) return ctx.set.status = 500;
 
@@ -96,10 +100,13 @@ authRoutes.post("/", async (ctx) => {
 
     if (!await AuthService.checkFullUserRules(userData.id)) return ctx.set.status = 401;
 
-    const result = await ChatService.createChatWithPrompt(userData.id, ctx.body.prompt);
-    if (!result) return ctx.set.status = 500;
+    // Создаём чат
+    const chatData = await ChatProvider.create([userData.id]);
+    if (!chatData) return false;
 
-    return ctx.set.status = 201;
+    ChatService.createChatWithPrompt(userData.id, chatData.id, ctx.body.prompt);
+
+    return chatData;
   } catch (err) {
     ctx.set.status = 500;
     console.error(err);
