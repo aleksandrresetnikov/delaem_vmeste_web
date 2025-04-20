@@ -34,7 +34,7 @@ const HomeHeader = () => {
 
   const copyLink = () => {
     if(!auth?.user?.ownedCompany.links) return;
-    copyToClipboard(`https://some.link/join/${auth?.user?.ownedCompany.links[0].link || ""}`);
+    copyToClipboard(`http://api.tula.vyatkaowls.ru/join/${auth?.user?.ownedCompany.links[0].link || ""}`);
     toast.success("Ссылка скопирована!");
   }
 
@@ -56,7 +56,7 @@ const HomeHeader = () => {
                 <>
                   <DropdownMenuLabel>Ссылка на вступление в организацию</DropdownMenuLabel>
                   <DropdownMenuItem>
-                    <Input type={"text"} value={`https://some.link/join/${auth?.user?.ownedCompany.links[0].link || ""}`}/>
+                    <Input type={"text"} value={`http://api.tula.vyatkaowls.ru/join/${auth?.user?.ownedCompany?.links[0]?.link || ""}`}/>
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={copyLink}>
                     <Button>Скопировать ссылку</Button>
