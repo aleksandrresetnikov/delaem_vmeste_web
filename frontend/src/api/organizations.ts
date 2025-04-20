@@ -14,43 +14,33 @@ export interface IComment {
   text: string
 }
 
+export interface IStats{
+  totalChats: number,
+  closedChats: number,
+  averageRating: number,
+  reviewCount: number
+}
+
 // Вся информация о карточке
 export interface OrganizationData {
   id: number,
   name: string,
   description?: string,
-  imageUrl?: string,
-  rate: number,
-  totalChats: number,
-  closedChats: number,
-  reviews: IComment[]
-}
-
-export interface IStats{
-  totalChats: number,
-  closedChats: number,
-  openChats: number,
-  averageRating: number,
-  reviewCount: number
-}
-
-// Краткая информация о карточке
-export interface OrganizationCardData {
-  id: number,
-  name: string,
-  description?: string,
   imgUrl?: string,
+  ownerId: number,
   stats: IStats
 }
 
-export interface ReviewData{
-  rating: number,
-  chatId:number,
-  text: string
+// Краткая информация о карточке
+export interface ExtendedOrganizationData  extends OrganizationData{
+  members: any,
+  owner: any,
+  reviews: any
 }
 
+
 // Получить организации
-export const fetchOrganizations = async (): Promise<AxiosResponse<OrganizationCardData[]>> => {
+export const fetchOrganizations = async (): Promise<AxiosResponse<OrganizationData[]>> => {
   return await axios.get("/company");
 }
 
@@ -60,7 +50,7 @@ export const createOrganization = async (data: CreateOrganizationData) => {
 }
 
 // Получить организацию по ID
-export const getOrganizationById = async (id: string): Promise<AxiosResponse<OrganizationData>> => {
+export const getOrganizationById = async (id: number): Promise<AxiosResponse<ExtendedOrganizationData>> => {
   return await axios.get(`/company/${id}`);
 }
 
@@ -79,8 +69,3 @@ export const generateOrganizationLink = async (orgId: number) => {
   return await axios.post(`/company/link/${orgId}`);
 }
 
-// Оставить рейтинг об организации
-export const sendOrganizationReview = async (data: ReviewData) => {
-  console.log(data);
-  return await axios.post(`/review`, data);
-}

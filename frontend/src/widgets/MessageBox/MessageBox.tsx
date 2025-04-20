@@ -11,7 +11,7 @@ import axios from '@/lib/axios';
 const MessageBox = () => {
   const [text, setText] = useState("");
   const chat = useChat();
-  const $file = useRef(null);
+  const $file = useRef<HTMLInputElement | null>(null);
 
   const handleSendMessage = async () => {
     const chatId = chat?.currentChat?.id;
@@ -45,7 +45,7 @@ const MessageBox = () => {
         },
       });
       if (response.status !== 201) throw new Error('Upload failed');
-      $file.current.files = null;
+      if ($file.current && $file.current.files) $file.current.files = null;
     } catch (error) {
       console.error('Upload error:', error);
       throw error;
@@ -60,8 +60,8 @@ const MessageBox = () => {
 
   return (
       <div className={styles.wrapper}>
-        <input type="file" ref={$file} style={{position:"absolute", zIndex: -999}} onChange={handleChange} />
-        <Button variant={"ghost"} onClick={() => $file.current.click()}>
+        <input type="file" ref={$file} style={{position: "absolute", zIndex: -999}} onChange={handleChange}/>
+        <Button variant={"ghost"} onClick={() => $file.current && $file.current && $file.current.click()}>
           <Paperclip/>
         </Button>
         <input

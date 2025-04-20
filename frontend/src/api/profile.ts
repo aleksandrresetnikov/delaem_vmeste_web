@@ -8,6 +8,8 @@ export interface ProfileData {
   role: IUserRole | undefined;
 }
 
+
+
 // Получение профиля
 export const fetchProfile = async () => {
   return await axios.get("/auth/profile");

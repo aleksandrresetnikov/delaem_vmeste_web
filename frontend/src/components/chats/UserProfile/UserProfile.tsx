@@ -57,17 +57,17 @@ const UserProfile = () => {
       if (profileInfo && typeof profileInfo !== 'boolean') {
         setData({
           ...profileInfo,
-          role: profileInfo.role,
-          company: profileInfo.company,
-          address: profileInfo.address,
-          phone: profileInfo.phone,
-          email: profileInfo.email,
-          birthDate: profileInfo.birthDate,
-          skills: profileInfo.skills,
-          fullname: profileInfo.fullname,
-          username: profileInfo.username,
-          categories: profileInfo.categories,
-          createdAt: profileInfo.createdAt
+          // role: profileInfo.role,
+          // company: profileInfo.company,
+          // address: profileInfo.address,
+          // phone: profileInfo.phone,
+          // email: profileInfo.email,
+          // birthDate: profileInfo.birthDate,
+          // skills: profileInfo.skills,
+          // fullname: profileInfo.fullname,
+          // username: profileInfo.username,
+          // categories: profileInfo.categories,
+          // createdAt: profileInfo.createdAt
         });
       }
     }

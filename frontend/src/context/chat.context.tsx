@@ -11,7 +11,7 @@ import {
   sendMessage,
   SendMessageData
 } from '@/api/chats';
-import {Chat, Company, Message} from "../../../backend/generated/prisma";
+import {Chat, Company, Message, User} from "../../../backend/generated/prisma";
 import {useMutation, useQuery, useQueryClient} from 'react-query';
 
 interface ChatContextType {
@@ -47,6 +47,7 @@ export interface ExtendedMessageType extends Message {
 export interface ExtendedChatType extends Chat {
   company: Company;
   messages: ExtendedMessageType[];
+  users?: User;
 }
 
 export interface ChatInListProps {
@@ -141,10 +142,10 @@ export const ChatProvider = ({children}: ChatProviderProps) => {
   const parseChat = (data: ChatInListProps, myUserId: number) => {
     let username: string = "";
 
-    console.log(data.chat);
-
-    if(data.chat.users[0].user && data.chat.users[0].user.id !== myUserId) {
+    // @ts-ignore
+    if(data?.chat?.users && data.chat.users[0] && data.chat.users[0].user && data.chat.users[0].user.id !== myUserId) {
       // Если сообщение отправлено не мной
+      // @ts-ignore
       username = !data.chat.users[0].user.fullname ? "Новый чат" : data.chat.users[0].user.fullname || "Неизвестный чат";
     } else {
       // Если мной
@@ -167,6 +168,7 @@ export const ChatProvider = ({children}: ChatProviderProps) => {
 
     if(currentChat.users[0] && currentChat.users[0].id !== myUserId) {
       // Если сообщение отправлено не мной
+      // @ts-ignore
       username = !currentChat.users[0].fullname ? "Новый чат" : currentChat.users[0].fullname || "Неизвестный чат";
     } else {
       // Если мной
