@@ -13,8 +13,9 @@ export const correctWordForm = (count: number): string => {
   }
 }
 export const checkRate = (rate: number): string => {
-  if(rate === 0) return 'Организация неизвестна';
   if(rate > 0 && rate < 3.5) return 'Организация сомнительная';
   if(rate >= 3.5 && rate < 4.5) return 'Организация нормальная';
   if(rate >= 4.5) return 'Организация отличная';
+
+  return 'Организация неизвестна';
 }
