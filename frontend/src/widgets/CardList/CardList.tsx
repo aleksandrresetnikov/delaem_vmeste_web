@@ -19,57 +19,6 @@ const CardList = ({data}: { data: OrganizationCardData[] }) => {
                 />
             )
           }
-
-          <OrganizationCard
-              key={"a"}
-              id={"b"}
-              imageUrl={"v"}
-              title={"title"}
-              description={"desc"}
-          />
-          <OrganizationCard
-              key={"a"}
-              id={"b"}
-              imageUrl={"v"}
-              title={"title"}
-              description={"desc"}
-          />
-          <OrganizationCard
-              key={"a"}
-              id={"b"}
-              imageUrl={"v"}
-              title={"title"}
-              description={"desc"}
-          />
-          <OrganizationCard
-              key={"a"}
-              id={"b"}
-              imageUrl={"v"}
-              title={"title"}
-              description={"desc"}
-          />
-          <OrganizationCard
-              key={"a"}
-              id={"b"}
-              imageUrl={"v"}
-              title={"title"}
-              description={"desc"}
-          />
-          <OrganizationCard
-              key={"a"}
-              id={"b"}
-              imageUrl={"v"}
-              title={"title"}
-              description={"desc"}
-          />
-
-          <OrganizationCard
-              key={"a"}
-              id={"b"}
-              imageUrl={"v"}
-              title={"title"}
-              description={"desc"}
-          />
         </div>
       </div>
   )

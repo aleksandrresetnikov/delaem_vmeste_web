@@ -1,5 +1,5 @@
 'use client'
-import s from './AddRateModal.module.css'
+import s from './AddReviewModal.module.css'
 import {
     Dialog,
     DialogContent,
@@ -13,14 +13,17 @@ import {Slider} from "@/components/ui/slider";
 import {useState} from "react";
 import {Button} from "@/components/ui/button";
 import useChat from "@/hooks/useChat";
-import {sendOrganizationRate} from "@/api/organizations";
+import {OrganizationReview, sendOrganizationReview} from "@/api/organizations";
+import {Input} from "@/components/ui/input";
 
-const AddRateModal = () => {
+const AddReviewModal = () => {
     const modal = useModal()
     const chat = useChat()
     const isOpen = modal?.isOpen('rate')
 
     const [rate, setRate] = useState(5)
+    const [review, setReview] = useState('')
+
 
     const onClose = (state: boolean) => {
         modal?.onClose(state)
@@ -28,12 +31,17 @@ const AddRateModal = () => {
 
     const handleSubmitRate = async () => {
         const orgId = chat?.currentChat?.company.id
-        if (orgId) await sendOrganizationRate(orgId)
+        const reviewData: OrganizationReview = {
+            rate,
+            review: review.trim() || undefined
+        }
+        if (orgId) await sendOrganizationReview(orgId, reviewData)
+        setReview('')
         modal?.closeAll()
     }
 
     return (
-        <Dialog open={isOpen} onOpenChange={onClose}>
+        <Dialog open={true} onOpenChange={onClose}>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle/>
@@ -50,6 +58,9 @@ const AddRateModal = () => {
                             onValueChange={(value) => setRate(value[0])}
                         />
                     </div>
+
+                    <Input placeholder={'Здесь вы можете написать приятные слова'}
+                           value={review} onChange={(e) => setReview(e.target.value)}/>
                 </div>
                 <Button onClick={handleSubmitRate}>Отправить</Button>
             </DialogContent>
@@ -57,4 +68,4 @@ const AddRateModal = () => {
     )
 }
 
-export default AddRateModal
+export default AddReviewModal

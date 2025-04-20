@@ -35,6 +35,11 @@ export interface OrganizationCardData {
   imageUrl?: string,
 }
 
+export interface OrganizationReview{
+  rate: number,
+  review?: string
+}
+
 // Получить организации
 export const fetchOrganizations = async (): Promise<AxiosResponse<OrganizationCardData[]>> => {
   return await axios.get("/company");
@@ -66,6 +71,6 @@ export const generateOrganizationLink = async (orgId: number) => {
 }
 
 // Оставить рейтинг об организации
-export const sendOrganizationRate = async (orgId: number) => {
-  // return await axios.post(`/company/rate/${orgId}`);
+export const sendOrganizationReview= async (id: number, data: OrganizationReview) => {
+  // return await axios.post(`/company/review/${id}`, data)
 }

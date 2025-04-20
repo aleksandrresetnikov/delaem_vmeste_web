@@ -19,7 +19,9 @@ const OrganizationCard: FC<OrganizationCardData> = ({id, imageUrl, rate, title, 
       <div className={s.card} title="Подробнее" onClick={handleOpenModal}>
         <div className={s.imageBlock}>
           <img className={s.image} width={200} height={200} alt={title} src={imageUrl || '/icons/heart.png'}/>
-          <InfoBadge className={s.infoBadge} type='likes' count={12} text={correctWordForm(rate)}/>
+            {
+                rate > 0 && <InfoBadge className={s.infoBadge} type='likes' count={rate} text={correctWordForm(rate)}/>
+            }
         </div>
 
         <div className={s.text}>
