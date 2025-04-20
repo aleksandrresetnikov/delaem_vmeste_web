@@ -1,6 +1,12 @@
 import {Elysia} from 'elysia';
 import {getUserData} from '../middleware/authorization.middleware';
-import {ChatOrganizationPatchDto, PostChatGptBody, PostMessageBodyDto, PostMessageFileBodyDto} from '../dto/chat.dto';
+import {
+  ChatOrganizationPatchDto,
+  PostChatGptBody,
+  PostMessageBodyDto,
+  PostMessageFileBodyDto,
+  PostMessageFileParamsDto
+} from '../dto/chat.dto';
 import {ChatService} from '../service/chat.service';
 import {AuthService} from '../service/auth.service';
 import {ChatProvider} from "../providers/chat.provider.ts";
@@ -136,18 +142,34 @@ authRoutes.post("/message/:chatId", async (ctx) => {
 
 authRoutes.post("/message/file/:chatId", async (ctx) => {
   const file = ctx.body.file;
+  const {chatId} = ctx.params;
 
-  if (!file) {
-    throw new Error('No file uploaded');
+  try {
+    // Получаем аккаунт по хидеру авторизации
+    const userData = await getUserData(ctx);
+    if (!userData) return ctx.set.status = 401;
+
+    if (!file) {
+      throw new Error('No file uploaded');
+    }
+
+    const fileName = `${Date.now()}_${file.name}`;
+    const filePath = `./files/${fileName}`;
+
+    await write(filePath, file);
+
+    // Добавляем сообщение с файлом в чат
+    await ChatService.sendMessage(userData.id, chatId, "DEFAULT", {
+      link: `http://localhost:8000/files/${fileName}`
+    })
+
+    return ctx.set.status = 201;
+  } catch(e){
+    ctx.set.status = 500;
+    console.error(e);
+    return e;
   }
-
-  const fileName = `${Date.now()}_${file.name}`;
-  const filePath = `./files/${fileName}`;
-
-  await write(filePath, file);
-
-  return {success: true, path: filePath};
-}, {body: PostMessageFileBodyDto});
+}, {body: PostMessageFileBodyDto, params: PostMessageFileParamsDto});
 
 authRoutes.post("/", async (ctx) => {
   try {

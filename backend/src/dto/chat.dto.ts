@@ -31,3 +31,7 @@ export const PostMessageFileBodyDto = t.Object(
      file: t.File()
     }
 )
+
+export const PostMessageFileParamsDto = t.Object({
+  chatId: t.Number()
+})

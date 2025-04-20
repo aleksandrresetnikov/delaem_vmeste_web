@@ -6,6 +6,7 @@ import {ChevronRight, Paperclip} from "lucide-react";
 import {createChat, sendMessage} from "@/api/chats";
 import useChat from "@/hooks/useChat";
 import {toast} from 'sonner';
+import axios from '@/lib/axios';
 
 const MessageBox = () => {
   const [text, setText] = useState("");
@@ -38,16 +39,13 @@ const MessageBox = () => {
     formData.append('file', file);
 
     try {
-      const response = await fetch(`http://localhost:8000/api/chat/message/file/${chat?.currentChat?.id}`, {
-        method: 'POST',
-        body: formData,
+      const response = await axios.post(`/chat/message/file/${chat?.currentChat?.id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data', // Важно для загрузки файлов
+        },
       });
-
-      if (!response.ok) throw new Error('Upload failed');
-
-      const result = await response.json();
-      console.log('Upload success:', result);
-      return result;
+      if (response.status !== 201) throw new Error('Upload failed');
+      $file.current.files = null;
     } catch (error) {
       console.error('Upload error:', error);
       throw error;
@@ -62,10 +60,10 @@ const MessageBox = () => {
 
   return (
       <div className={styles.wrapper}>
-        {/*<input type="file" ref={$file} style={{position:"absolute", zIndex: -999}} onChange={handleChange} />*/}
-        {/*<Button variant={"ghost"} onClick={() => $file.current.click()}>*/}
-        {/*  <Paperclip/>*/}
-        {/*</Button>*/}
+        <input type="file" ref={$file} style={{position:"absolute", zIndex: -999}} onChange={handleChange} />
+        <Button variant={"ghost"} onClick={() => $file.current.click()}>
+          <Paperclip/>
+        </Button>
         <input
             onChange={(e) => setText(e.target.value)}
             type={"text"}
