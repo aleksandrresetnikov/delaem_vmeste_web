@@ -13,6 +13,7 @@ import ChatRoute from "./route/chat.route.ts";
 import CompanyRoute from "./route/company.route.ts";
 import ReviewRoute from "./route/review.route.ts";
 import {Logestic} from 'logestic';
+import { WebRTCService } from './service/webrtc.service.ts';
 
 export const backendLink = "http://localhost:8000";
 const app = new Elysia();
@@ -74,6 +75,9 @@ async function bootstrap() {
           .use(CompanyRoute)
           .use(ReviewRoute)
   );
+
+  // Gодключаем WebRTP:
+  WebRTCService.runRtcServer();
 
   // Едем
   app.listen(8000, () => {
