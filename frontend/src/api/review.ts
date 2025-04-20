@@ -1,8 +1,8 @@
 import axios from "@/lib/axios";
 
-export interface ReviewData{
+export interface ReviewData {
   rating: number,
-  chatId:number,
+  chatId: number,
   text: string
 }
 

@@ -1,4 +1,4 @@
-.wrapper{
+.wrapper {
     display: flex;
     align-items: center;
     justify-content: start;
@@ -9,10 +9,10 @@
     background-color: var(--secondary);;
 }
 
-.wrapper:hover{
+.wrapper:hover {
     cursor: pointer;
 }
 
-.wrapper img{
+.wrapper img {
     border-radius: 100%;
 }

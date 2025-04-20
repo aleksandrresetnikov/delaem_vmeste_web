@@ -14,87 +14,87 @@ import {Button} from "@/components/ui/button";
 import {useRouter} from "next/navigation";
 
 const ChatWindow = () => {
-    const chat = useChat();
-    const auth = useAuth();
-    const router = useRouter();
-    const $window = useRef(null);
-    const $w2 = useRef(null);
+  const chat = useChat();
+  const auth = useAuth();
+  const router = useRouter();
+  const $window = useRef(null);
+  const $w2 = useRef(null);
 
-    const renderMessage = (item: IMessage) => {
-        if (!auth?.user?.id) return;
+  const renderMessage = (item: IMessage) => {
+    if (!auth?.user?.id) return;
 
-        if (item.type === "DEFAULT") {
-            if (item.content.text) {
-                return (
-                    <Bubble
-                        time={item.createdOn.toString()}
-                        byMe={item.userId === auth.user.id && !item.content.ai}
-                        byAi={item.content.ai || false}>
-                        {item.content.text}
-                    </Bubble>
-                )
-            } else if (item.content.link) {
-                return (
-                    <Bubble
-                        time={item.createdOn.toString()}
-                        byMe={item.userId === auth.user.id && !item.content.ai}
-                        byAi={item.content.ai || false}>
-                        <Button variant={"link"} onClick={() => item.content.link && router.push(item.content.link)}>Отправлен
-                            файл</Button>
-                    </Bubble>
-                )
-            }
-        }
-        return (<Status loader={item.type === "STATUS_LOADING"}>{item.content.text}</Status>)
+    if (item.type === "DEFAULT") {
+      if (item.content.text) {
+        return (
+            <Bubble
+                time={item.createdOn.toString()}
+                byMe={item.userId === auth.user.id && !item.content.ai}
+                byAi={item.content.ai || false}>
+              {item.content.text}
+            </Bubble>
+        )
+      } else if (item.content.link) {
+        return (
+            <Bubble
+                time={item.createdOn.toString()}
+                byMe={item.userId === auth.user.id && !item.content.ai}
+                byAi={item.content.ai || false}>
+              <Button variant={"link"} onClick={() => item.content.link && router.push(item.content.link)}>Отправлен
+                файл</Button>
+            </Bubble>
+        )
+      }
     }
+    return (<Status loader={item.type === "STATUS_LOADING"}>{item.content.text}</Status>)
+  }
 
-    useInterval(() => {
-        if (!$window.current) return;
-        // @ts-ignore
-        if ($window.current.scrollHeight - 500 - $window.current.scrollTop < 200) {
-            // @ts-ignore
-            $window.current.scrollTop = $window.current.scrollHeight;
+  useInterval(() => {
+    if (!$window.current) return;
+    // @ts-ignore
+    if ($window.current.scrollHeight - 500 - $window.current.scrollTop < 200) {
+      // @ts-ignore
+      $window.current.scrollTop = $window.current.scrollHeight;
+    }
+  }, 500);
+
+  return (
+      <div className={styles.scroll} ref={$window}>
+        {/* Нет чатов вообще */}
+        {
+            !chat?.isChats || chat?.selectedChat === -1 &&
+            (<div className={styles.hint}>
+              <h4>Опишите проблему</h4>
+              <p>Мы подберем подходящее решение для Вас</p>
+            </div>)
         }
-    }, 500);
-
-    return (
-        <div className={styles.scroll} ref={$window}>
-            {/* Нет чатов вообще */}
-            {
-                !chat?.isChats || chat?.selectedChat === -1 &&
-                (<div className={styles.hint}>
-                    <h4>Опишите проблему</h4>
-                    <p>Мы подберем подходящее решение для Вас</p>
-                </div>)
-            }
-            {
-                chat?.chatLoading && <LoadingWrapper/>
-            }
+        {
+            chat?.chatLoading && <LoadingWrapper/>
+        }
 
 
-            <div className={styles.wrapper} ref={$w2}>
+        <div className={styles.wrapper} ref={$w2}>
 
 
-                {/* Профиль организации/юзера */}
-                {
-                    chat?.currentChat &&
-                    <div className={styles.profile}><UserProfile/></div>
-                }
+          {/* Профиль организации/юзера */}
+          {
+              chat?.currentChat &&
+              <div className={styles.profile}><UserProfile/></div>
+          }
 
 
-                {
-                    chat?.messages && chat?.messages.map(item => renderMessage(item))
-                }
+          {
+              chat?.messages && chat?.messages.map(item => renderMessage(item))
+          }
 
-                {
-                    !chat?.currentChat?.company?.id &&
-                    chat?.messages[chat?.messages.length - 1] &&
-                    chat?.messages[chat?.messages.length - 1].type === "SELECT_ORGANIZATION" &&
-                    <OfferedOrganizationList/>
-                }
-            </div>
+          {
+              !chat?.currentChat?.company?.id &&
+              chat?.messages[chat?.messages.length - 1] &&
+              chat?.messages[chat?.messages.length - 1].type === "SELECT_ORGANIZATION" &&
+              <OfferedOrganizationList/>
+          }
         </div>
-    );
+      </div>
+  );
 };
 
 export default ChatWindow;

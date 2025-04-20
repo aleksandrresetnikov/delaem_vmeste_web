@@ -9,7 +9,6 @@ export interface ProfileData {
 }
 
 
-
 // Получение профиля
 export const fetchProfile = async () => {
   return await axios.get("/auth/profile");

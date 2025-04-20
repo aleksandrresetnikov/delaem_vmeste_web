@@ -1,9 +1,9 @@
 import s from './CardList.module.css'
-import {OrganizationCardData} from "@/api/organizations";
+import {OrganizationData} from "@/api/organizations";
 import OrganizationCard from "@/components/organizations/OrganizationCard/OrganizationCard";
 import React from "react";
 
-const CardList = ({data}: { data: OrganizationCardData[] }) => {
+const CardList = ({data}: { data: OrganizationData[] }) => {
   return (
       <div className={s.wrapper}>
         <div className={s.cardsGrid}>
@@ -16,6 +16,7 @@ const CardList = ({data}: { data: OrganizationCardData[] }) => {
                     description={card.description}
                     name={card.name}
                     stats={card.stats}
+                    ownerId={card.ownerId}
                 />
             )
           }

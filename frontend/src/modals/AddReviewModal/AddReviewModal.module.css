@@ -1,10 +1,11 @@
-.wrapper{
+.wrapper {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
 }
-.contentWrapper{
+
+.contentWrapper {
     width: 50%;
     height: 100%;
     display: flex;
@@ -14,11 +15,11 @@
     padding: 10px;
 }
 
-.wrapper input{
+.wrapper input {
     max-width: 70%;
     min-height: 100px;
 }
 
-.contentWrapper h2{
+.contentWrapper h2 {
     color: var(--primary);
 }

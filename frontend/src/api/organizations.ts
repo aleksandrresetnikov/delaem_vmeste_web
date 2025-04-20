@@ -14,7 +14,7 @@ export interface IComment {
   text: string
 }
 
-export interface IStats{
+export interface IStats {
   totalChats: number,
   closedChats: number,
   averageRating: number,
@@ -32,7 +32,7 @@ export interface OrganizationData {
 }
 
 // Краткая информация о карточке
-export interface ExtendedOrganizationData  extends OrganizationData{
+export interface ExtendedOrganizationData extends OrganizationData {
   members: any,
   owner: any,
   reviews: any

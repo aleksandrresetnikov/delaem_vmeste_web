@@ -3,12 +3,12 @@ import AddReviewModal from "@/modals/AddReviewModal/AddReviewModal";
 
 
 const Modals = () => {
-    return (
-        <>
-            <AddReviewModal/>
-            <OrganizationModal/>
-        </>
-    );
+  return (
+      <>
+        <AddReviewModal/>
+        <OrganizationModal/>
+      </>
+  );
 };
 
 export default Modals;

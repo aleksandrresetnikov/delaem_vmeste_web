@@ -5,7 +5,7 @@ import {Button} from "@/components/ui/button";
 import {cn} from "@/lib/utils";
 import Image from 'next/image'
 import ActionButton from "@/components/shared/ActionButton/ActionButton";
-import { useRouter } from 'next/navigation';
+import {useRouter} from 'next/navigation';
 
 const MainSection = () => {
   const router = useRouter();
@@ -24,7 +24,7 @@ const MainSection = () => {
         {/*Контейнер кнопок*/}
         <div className={cn(s.container, s.btnContainer)}>
           <ActionButton onClick={() => router.push("/auth")}
-              action={'Получить помощь'}
+                        action={'Получить помощь'}
           />
 
           <Button variant='secondary' size='xl' onClick={() => router.push("/auth?asVolunteer=true")}>
